@@ -4,7 +4,7 @@
 публикуется через GitHub Pages из ветки `main`.
 
 - `index.html` — вся страница, стили внутри, внешних шрифтов и библиотек нет.
-- `img/` — скриншот и обои в WebP (из `feather-de/docs/images` и `assets/wallpapers`).
+- `img/` — скриншот рабочего стола и обои в WebP (обои из `feather-de/assets/wallpapers`).
 - Образ ISO раздаётся с [SourceForge](https://sourceforge.net/projects/featheros/):
   при выходе новой версии поменять ссылку, размер и SHA-256 в блоке «Попробуйте Пёрышко».
 

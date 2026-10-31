@@ -1,0 +1,420 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Пёрышко — красивый рабочий стол, который не тормозит</title>
+<meta name="description" content="Пёрышко — лёгкое окружение рабочего стола для Linux на собственном Wayland-композиторе. Стекло, скругления и пружинные анимации при 0 % CPU в простое.">
+<meta property="og:title" content="Пёрышко — красивый рабочий стол, который не тормозит">
+<meta property="og:description" content="Лёгкое окружение рабочего стола для Linux: стекло, скругления и пружинные анимации при 0 % CPU в простое.">
+<meta property="og:type" content="website">
+<meta property="og:image" content="img/desktop.webp">
+<meta name="theme-color" content="#cfe3f7">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<style>
+:root {
+  --bg: #f4f6fb;
+  --bg-2: #ffffff;
+  --text: #1d1d1f;
+  --muted: #5f6470;
+  --line: rgba(20, 30, 60, .10);
+  --glass: rgba(255, 255, 255, .62);
+  --glass-line: rgba(255, 255, 255, .75);
+  --accent: #0a72f0;
+  --accent-2: #3aa0ff;
+  --shadow: 0 1px 2px rgba(20, 30, 60, .06), 0 12px 40px rgba(20, 30, 60, .10);
+  --hero: url(img/dawn.webp);
+  --code: #f0f2f7;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0d1020;
+    --bg-2: #151a2e;
+    --text: #f2f3f7;
+    --muted: #a3a9bb;
+    --line: rgba(255, 255, 255, .10);
+    --glass: rgba(28, 33, 56, .58);
+    --glass-line: rgba(255, 255, 255, .12);
+    --accent: #4aa3ff;
+    --accent-2: #7cc0ff;
+    --shadow: 0 1px 2px rgba(0, 0, 0, .3), 0 16px 48px rgba(0, 0, 0, .45);
+    --hero: url(img/aurora.webp);
+    --code: #1b2138;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0d1020; --bg-2: #151a2e; --text: #f2f3f7; --muted: #a3a9bb;
+  --line: rgba(255, 255, 255, .10); --glass: rgba(28, 33, 56, .58);
+  --glass-line: rgba(255, 255, 255, .12); --accent: #4aa3ff; --accent-2: #7cc0ff;
+  --shadow: 0 1px 2px rgba(0, 0, 0, .3), 0 16px 48px rgba(0, 0, 0, .45);
+  --hero: url(img/aurora.webp); --code: #1b2138; color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font: 17px/1.55 Inter, -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, "Noto Sans", Ubuntu, Cantarell, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+img { max-width: 100%; display: block; }
+a { color: var(--accent); text-decoration: none; }
+a:hover { text-decoration: underline; }
+.wrap { max-width: 1120px; margin: 0 auto; padding: 0 24px; }
+h1, h2, h3 { letter-spacing: -.02em; line-height: 1.12; margin: 0; }
+h2 { font-size: clamp(30px, 4.4vw, 46px); font-weight: 700; }
+.lead { color: var(--muted); font-size: clamp(17px, 1.6vw, 20px); max-width: 640px; }
+section { padding: 96px 0; }
+.center { text-align: center; }
+.center .lead { margin-left: auto; margin-right: auto; }
+
+/* Меню-бар */
+.bar {
+  position: sticky; top: 0; z-index: 10;
+  background: var(--glass);
+  backdrop-filter: saturate(180%) blur(20px);
+  -webkit-backdrop-filter: saturate(180%) blur(20px);
+  border-bottom: 1px solid var(--line);
+}
+.bar .wrap { display: flex; align-items: center; gap: 28px; height: 52px; }
+.brand { display: flex; align-items: center; gap: 10px; font-weight: 650; color: var(--text); }
+.brand:hover { text-decoration: none; }
+.brand img { width: 26px; height: 26px; }
+.bar nav { display: flex; gap: 22px; margin-left: auto; font-size: 15px; }
+.bar nav a { color: var(--text); opacity: .8; }
+.bar nav a:hover { opacity: 1; text-decoration: none; }
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  padding: 12px 22px; border-radius: 999px; font-weight: 600; font-size: 16px;
+  border: 1px solid transparent; cursor: pointer; transition: transform .15s, box-shadow .15s, background .15s;
+}
+.btn:hover { text-decoration: none; transform: translateY(-1px); }
+.btn-primary { background: linear-gradient(180deg, var(--accent-2), var(--accent)); color: #fff; box-shadow: 0 6px 20px rgba(10, 114, 240, .35); }
+.dl .btn-glass { border-color: var(--line); }
+.btn-glass { background: var(--glass); color: var(--text); border-color: var(--glass-line); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); }
+.btn-sm { padding: 7px 14px; font-size: 14px; }
+
+/* Первый экран */
+.hero {
+  position: relative; overflow: hidden;
+  padding: 88px 0 0;
+  background: var(--hero) center / cover no-repeat;
+}
+.hero::after {
+  content: ""; position: absolute; inset: auto 0 0 0; height: 220px;
+  background: linear-gradient(to bottom, transparent, var(--bg));
+  pointer-events: none;
+}
+.hero .wrap { position: relative; z-index: 1; text-align: center; }
+.pill {
+  display: inline-block; padding: 6px 14px; border-radius: 999px; font-size: 14px; font-weight: 550;
+  background: var(--glass); border: 1px solid var(--glass-line); color: var(--text);
+  backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+}
+.hero h1 { font-size: clamp(40px, 7vw, 76px); font-weight: 750; margin: 22px auto 18px; max-width: 900px; }
+.hero h1 span {
+  background: linear-gradient(90deg, #0a72f0, #7b5cff 55%, #ff7a8a);
+  -webkit-background-clip: text; background-clip: text; color: transparent;
+}
+.hero .lead { margin: 0 auto 32px; color: var(--text); opacity: .78; }
+.cta { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+.cta-note { font-size: 14px; color: var(--text); opacity: .65; margin-top: 14px; }
+.shot {
+  margin: 56px auto 0; max-width: 1040px;
+  border-radius: 18px; overflow: hidden;
+  border: 1px solid var(--glass-line);
+  box-shadow: 0 30px 80px rgba(20, 30, 60, .28), 0 0 0 8px rgba(255, 255, 255, .18);
+}
+
+/* Цифры */
+.stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-top: 48px; }
+.stat {
+  background: var(--bg-2); border: 1px solid var(--line); border-radius: 22px;
+  padding: 26px 22px; box-shadow: var(--shadow);
+}
+.stat b { display: block; font-size: clamp(34px, 4vw, 48px); letter-spacing: -.03em; line-height: 1; margin-bottom: 10px; }
+.stat b small { font-size: .5em; font-weight: 650; }
+.stat p { margin: 0; color: var(--muted); font-size: 15px; }
+.note { color: var(--muted); font-size: 14px; margin-top: 18px; }
+
+/* Возможности */
+.grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 48px; }
+.card {
+  background: var(--bg-2); border: 1px solid var(--line); border-radius: 22px;
+  padding: 26px; box-shadow: var(--shadow);
+}
+.card h3 { font-size: 19px; margin: 16px 0 8px; }
+.card p { margin: 0; color: var(--muted); font-size: 15.5px; }
+.ico {
+  width: 46px; height: 46px; border-radius: 12px; display: grid; place-items: center; color: #fff;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .35), 0 4px 12px rgba(20, 30, 60, .15);
+}
+.ico svg { width: 24px; height: 24px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.c-blue { background: linear-gradient(180deg, #4fb0ff, #0a72f0); }
+.c-violet { background: linear-gradient(180deg, #a68bff, #6a4cf0); }
+.c-pink { background: linear-gradient(180deg, #ff8fb1, #f0447a); }
+.c-orange { background: linear-gradient(180deg, #ffbf5a, #ff8a1f); }
+.c-green { background: linear-gradient(180deg, #5fdc85, #22a957); }
+.c-teal { background: linear-gradient(180deg, #5fe0e0, #13a5b8); }
+.c-gray { background: linear-gradient(180deg, #a5adbd, #6b7385); }
+.c-dark { background: linear-gradient(180deg, #4a4f5c, #24272f); }
+.c-yellow { background: linear-gradient(180deg, #ffe066, #f5b800); }
+
+/* Приложения */
+.apps { display: grid; grid-template-columns: repeat(7, 1fr); gap: 14px; margin-top: 48px; }
+.app { text-align: center; }
+.app .ico { width: 72px; height: 72px; border-radius: 18px; margin: 0 auto 12px; }
+.app .ico svg { width: 36px; height: 36px; }
+.app b { display: block; font-size: 15px; }
+.app span { display: block; color: var(--muted); font-size: 13px; line-height: 1.35; margin-top: 4px; }
+
+/* Обои */
+.walls { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 48px; }
+.walls figure { margin: 0; }
+.walls img { border-radius: 16px; aspect-ratio: 16 / 9; object-fit: cover; width: 100%; box-shadow: var(--shadow); }
+.walls figcaption { text-align: center; color: var(--muted); font-size: 14px; margin-top: 10px; }
+
+/* Скачать */
+.download { background: linear-gradient(180deg, var(--bg), var(--bg-2)); }
+.dl { display: grid; grid-template-columns: 1.15fr 1fr; gap: 16px; margin-top: 48px; text-align: left; }
+.dl .card { padding: 32px; display: flex; flex-direction: column; min-width: 0; }
+.dl h3 { font-size: 24px; margin: 18px 0 6px; }
+.dl ul { margin: 16px 0 24px; padding-left: 20px; color: var(--muted); font-size: 15.5px; }
+.dl li + li { margin-top: 6px; }
+.dl .btn { align-self: flex-start; margin-top: auto; }
+.meta { color: var(--muted); font-size: 14px; margin-top: 4px; }
+.code {
+  position: relative; margin: 16px 0 12px; background: var(--code); border: 1px solid var(--line);
+  border-radius: 12px; padding: 14px 92px 14px 16px;
+  font: 14px/1.5 "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  overflow-x: auto; white-space: nowrap;
+}
+.code button { position: absolute; top: 50%; right: 8px; transform: translateY(-50%); }
+.btn-copy { background: var(--bg-2); color: var(--text); border: 1px solid var(--line); }
+.sum { font: 12.5px/1.5 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; color: var(--muted); word-break: break-all; margin-top: 14px; }
+.honest {
+  margin: 28px auto 0; max-width: 760px; padding: 16px 20px; border-radius: 16px;
+  background: var(--glass); border: 1px solid var(--line); color: var(--muted); font-size: 15px; text-align: left;
+}
+
+footer { padding: 40px 0 56px; border-top: 1px solid var(--line); color: var(--muted); font-size: 14px; }
+footer .wrap { display: flex; gap: 20px; flex-wrap: wrap; align-items: center; }
+footer nav { display: flex; gap: 20px; margin-left: auto; flex-wrap: wrap; }
+
+@media (max-width: 900px) {
+  .stats { grid-template-columns: repeat(2, 1fr); }
+  .grid { grid-template-columns: repeat(2, 1fr); }
+  .apps { grid-template-columns: repeat(4, 1fr); row-gap: 28px; }
+  .dl { grid-template-columns: 1fr; }
+}
+@media (max-width: 600px) {
+  .wrap { padding: 0 16px; }
+  section { padding: 64px 0; }
+  .bar nav a:not(.btn) { display: none; }
+  .hero { padding-top: 56px; }
+  .shot { margin-top: 40px; border-radius: 12px; }
+  .grid, .walls { grid-template-columns: 1fr; }
+  .apps { grid-template-columns: repeat(3, 1fr); }
+  .stat { padding: 20px 14px; }
+  .stat p { font-size: 14px; }
+  .dl .card { padding: 24px; }
+  .code { white-space: normal; word-break: break-all; padding-right: 16px; }
+  .code button { position: static; transform: none; display: flex; margin-top: 10px; }
+  footer nav { margin-left: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .btn { transition: none; }
+}
+</style>
+</head>
+<body>
+
+<header class="bar">
+  <div class="wrap">
+    <a class="brand" href="#"><img src="favicon.svg" alt="">Пёрышко</a>
+    <nav>
+      <a href="#speed">Скорость</a>
+      <a href="#features">Возможности</a>
+      <a href="#apps">Приложения</a>
+      <a class="btn btn-primary btn-sm" href="#download">Скачать</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <section class="hero">
+    <div class="wrap">
+      <span class="pill">Пёрышко OS на базе Ubuntu 26.04 LTS</span>
+      <h1>Красивый рабочий стол, <span>который не&nbsp;тормозит</span></h1>
+      <p class="lead">Стекло, скругления и пружинные анимации на собственном Wayland-композиторе. Когда вы ничего не делаете, процессор тоже отдыхает: 0&nbsp;% в простое.</p>
+      <div class="cta">
+        <a class="btn btn-primary" href="#download">Скачать бесплатно</a>
+        <a class="btn btn-glass" href="https://github.com/Zumka1991/feather-de">Исходный код</a>
+      </div>
+      <p class="cta-note">Открытый проект на Rust · Linux x86_64 · UEFI и BIOS</p>
+      <div class="shot">
+        <img src="img/desktop.webp" srcset="img/desktop-960.webp 960w, img/desktop.webp 1920w" sizes="(max-width: 1040px) 100vw, 1040px" width="1920" height="1200" alt="Рабочий стол Пёрышка: строка меню, окно Терминала, уведомление и Dock">
+      </div>
+    </div>
+  </section>
+
+  <section id="speed">
+    <div class="wrap center">
+      <h2>Скорость — это и есть дизайн</h2>
+      <p class="lead">Обычно приходится выбирать: красиво или быстро. В Пёрышке у каждой метрики есть бюджет, и любое изменение, которое за него выходит, считается ошибкой.</p>
+      <div class="stats">
+        <div class="stat"><b>0&nbsp;<small>%</small></b><p>загрузка процессора в простое: ни таймеров, ни перерисовок «на всякий случай»</p></div>
+        <div class="stat"><b>&lt;1&nbsp;<small>мс</small></b><p>работа композитора на кадр, анимации идут на полной частоте экрана</p></div>
+        <div class="stat"><b>~35&nbsp;<small>МБ</small></b><p>собственной памяти на всю оболочку: меню, Dock, поиск и настройки</p></div>
+        <div class="stat"><b>60<small>/60</small></b><p>кадров в анимации браузера: ввод и сеть работают в фоне и не задерживают кадр</p></div>
+      </div>
+      <p class="note">Замеры композитора на 4K-экране с масштабом 200&nbsp;%. Методика и отчёты — в репозитории.</p>
+    </div>
+  </section>
+
+  <section id="features" style="padding-top:0">
+    <div class="wrap center">
+      <h2>Всё на своих местах</h2>
+      <p class="lead">Не нужно собирать окружение из десятка пакетов: всё уже работает вместе и выглядит как одно целое.</p>
+      <div class="grid" style="text-align:left">
+        <div class="card">
+          <div class="ico c-blue"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="4"/><path d="M3 9h18"/></svg></div>
+          <h3>Стекло и скругления</h3>
+          <p>Матовые панели, мягкие тени и скруглённые углы у любых окон, даже у старых программ.</p>
+        </div>
+        <div class="card">
+          <div class="ico c-violet"><svg viewBox="0 0 24 24"><path d="M3 17c3 0 4-10 7-10s3 6 5 6 3-4 6-4"/></svg></div>
+          <h3>Пружинные анимации</h3>
+          <p>Окна, Dock и панели движутся по физике пружины, а не по таймеру, и всегда точно на частоте экрана.</p>
+        </div>
+        <div class="card">
+          <div class="ico c-pink"><svg viewBox="0 0 24 24"><rect x="3" y="14" width="18" height="6" rx="3"/><path d="M7 11V8M12 11V5M17 11V8"/></svg></div>
+          <h3>Dock и Launchpad</h3>
+          <p>Увеличение при наведении, закрепление перетаскиванием, сетка приложений со страницами и поиском.</p>
+        </div>
+        <div class="card">
+          <div class="ico c-orange"><svg viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="6"/><path d="m15 15 5 5"/></svg></div>
+          <h3>Spotlight</h3>
+          <p>Запуск любой программы с клавиатуры и быстрые вычисления прямо в строке поиска.</p>
+        </div>
+        <div class="card">
+          <div class="ico c-teal"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="8" height="6" rx="1.5"/><rect x="13" y="5" width="8" height="6" rx="1.5"/><rect x="3" y="13" width="8" height="6" rx="1.5"/><rect x="13" y="13" width="8" height="6" rx="1.5"/></svg></div>
+          <h3>Обзор окон и рабочие столы</h3>
+          <p>Mission Control, до 16 рабочих столов, активные углы и жесты трекпада тремя и четырьмя пальцами.</p>
+        </div>
+        <div class="card">
+          <div class="ico c-green"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="6" rx="3"/><circle cx="16" cy="8" r="1.5"/><rect x="3" y="13" width="18" height="6" rx="3"/><circle cx="8" cy="16" r="1.5"/></svg></div>
+          <h3>Пункт управления</h3>
+          <p>Wi-Fi, Bluetooth, звук и яркость в одном месте, плюс системные настройки из 15 разделов.</p>
+        </div>
+        <div class="card">
+          <div class="ico c-gray"><svg viewBox="0 0 24 24"><path d="M3 6h18M6 6v-.5M3 12h11M3 18h7"/></svg></div>
+          <h3>Глобальное меню</h3>
+          <p>Меню программ Qt, KDE и GTK в верхней строке, системный трей и часы.</p>
+        </div>
+        <div class="card">
+          <div class="ico c-dark"><svg viewBox="0 0 24 24"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 8 3 8H3s3-1 3-8M10 20a2 2 0 0 0 4 0"/></svg></div>
+          <h3>Уведомления</h3>
+          <p>Баннеры с действиями, центр уведомлений с группировкой и режим «Не беспокоить» по расписанию.</p>
+        </div>
+        <div class="card">
+          <div class="ico c-yellow"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3 3 15 0 18M12 3c-3 3-3 15 0 18"/></svg></div>
+          <h3>Для всех</h3>
+          <p>Шесть языков, дробный масштаб и HiDPI, крупный текст, высокий контраст и отключение анимаций.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="apps" style="padding-top:0">
+    <div class="wrap center">
+      <h2>Свои приложения в том же стиле</h2>
+      <p class="lead">Написаны на Rust вместе с оболочкой, поэтому лёгкие и выглядят как часть системы.</p>
+      <div class="apps">
+        <div class="app"><div class="ico c-blue"><svg viewBox="0 0 24 24"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2Z"/></svg></div><b>Файлы</b><span>Быстрый просмотр, Корзина, архивы RAR и 7z</span></div>
+        <div class="app"><div class="ico c-dark"><svg viewBox="0 0 24 24"><path d="m5 8 4 4-4 4M12 17h7"/></svg></div><b>Терминал</b><span>Своё ядро, вкладки, TrueColor</span></div>
+        <div class="app"><div class="ico c-yellow"><svg viewBox="0 0 24 24"><path d="M6 4h12v16H6zM9 9h6M9 13h6M9 17h3"/></svg></div><b>Заметки</b><span>Поиск и автосохранение</span></div>
+        <div class="app"><div class="ico c-teal"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="9" cy="10" r="2"/><path d="m21 16-5-5-8 8"/></svg></div><b>Просмотр</b><span>Фото, SVG и PDF</span></div>
+        <div class="app"><div class="ico c-violet"><svg viewBox="0 0 24 24"><path d="M4 20h4L19 9l-4-4L4 16zM13 7l4 4"/></svg></div><b>Редактор</b><span>Вкладки, подсветка, замена</span></div>
+        <div class="app"><div class="ico c-orange"><svg viewBox="0 0 24 24"><rect x="5" y="3" width="14" height="18" rx="3"/><path d="M8 7h8M8 12h.01M12 12h.01M16 12h.01M8 16h.01M12 16h.01M16 16h.01"/></svg></div><b>Калькулятор</b><span>Обычный, инженерный, для программиста</span></div>
+        <div class="app"><div class="ico c-pink"><svg viewBox="0 0 24 24"><path d="M5 8h14l-1 12H6zM9 8a3 3 0 0 1 6 0"/></svg></div><b>Магазин</b><span>Установка программ в пару кликов</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section style="padding-top:0">
+    <div class="wrap center">
+      <h2>Оригинальные обои</h2>
+      <p class="lead">Созданы специально для Пёрышка. Можно поставить и свои: PNG, JPEG или WebP.</p>
+      <div class="walls">
+        <figure><img src="img/dawn-640.webp" width="640" height="360" loading="lazy" alt="Обои «Рассвет»"><figcaption>Рассвет</figcaption></figure>
+        <figure><img src="img/aurora-640.webp" width="640" height="360" loading="lazy" alt="Обои «Сияние»"><figcaption>Сияние</figcaption></figure>
+        <figure><img src="img/lake-640.webp" width="640" height="360" loading="lazy" alt="Обои «Горное озеро»"><figcaption>Горное озеро</figcaption></figure>
+      </div>
+    </div>
+  </section>
+
+  <section id="download" class="download">
+    <div class="wrap center">
+      <h2>Попробуйте Пёрышко</h2>
+      <p class="lead">Запишите образ на флешку и загрузитесь: система работает прямо с неё, а установить на диск можно в любой момент.</p>
+      <div class="dl">
+        <div class="card">
+          <div class="ico c-blue"><svg viewBox="0 0 24 24"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></svg></div>
+          <h3>Пёрышко OS 0.3.2</h3>
+          <p class="meta">Образ ISO · 2,2 ГБ · x86_64</p>
+          <ul>
+            <li>На базе Ubuntu 26.04 LTS, обновления обычным <code>apt upgrade</code></li>
+            <li>Живой сеанс без установки и понятный установщик с шифрованием диска</li>
+            <li>Офис, браузер, видео, музыка, печать и драйверы уже внутри</li>
+            <li>UEFI с Secure Boot и старые компьютеры с BIOS</li>
+          </ul>
+          <a class="btn btn-primary" href="https://sourceforge.net/projects/featheros/files/0.3.2/feather-os-0.3.2-amd64.iso/download">Скачать образ</a>
+          <p class="sum">SHA-256: d294d15ac42074a70ad51e289f9bdbba985fee4ef9b336d340231b0c321e5135</p>
+        </div>
+        <div class="card">
+          <div class="ico c-dark"><svg viewBox="0 0 24 24"><path d="m5 8 4 4-4 4M12 17h7"/></svg></div>
+          <h3>Уже есть Ubuntu?</h3>
+          <p class="meta">Поставьте Пёрышко одной командой</p>
+          <div class="code"><span id="cmd">curl -fsSL https://zumka1991.github.io/feather-de/install.sh | bash</span><button class="btn btn-sm btn-copy" type="button" data-copy="cmd">Копировать</button></div>
+          <ul>
+            <li>Подходит и для Ubuntu Server без рабочего стола</li>
+            <li>Подключает APT-репозиторий: дальше всё обновляется само</li>
+            <li>Только оболочка, без набора программ: добавьте <code>| bash -s -- --minimal</code></li>
+          </ul>
+          <a class="btn btn-glass" href="https://github.com/Zumka1991/feather-de#сборка-и-установка">Подробнее об установке</a>
+        </div>
+      </div>
+      <p class="honest"><b>Честно о статусе.</b> Пёрышко — молодой проект в активной разработке. Проверка на разных видеокартах, ноутбуках и мониторах ещё идёт. Если что-то не работает, расскажите об этом в <a href="https://github.com/Zumka1991/feather-de/issues">issues на GitHub</a>.</p>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <a class="brand" href="#"><img src="favicon.svg" alt="">Пёрышко</a>
+    <span>Открытый проект. Сделано с любовью к деталям.</span>
+    <nav>
+      <a href="https://github.com/Zumka1991/feather-de">GitHub</a>
+      <a href="https://sourceforge.net/projects/featheros/">SourceForge</a>
+      <a href="https://github.com/Zumka1991/feather-de/blob/master/CHANGELOG.md">Что нового</a>
+    </nav>
+  </div>
+</footer>
+
+<script>
+document.querySelectorAll('[data-copy]').forEach(function (b) {
+  b.addEventListener('click', function () {
+    var text = document.getElementById(b.dataset.copy).textContent;
+    var done = function () { b.textContent = 'Скопировано'; setTimeout(function () { b.textContent = 'Копировать'; }, 1600); };
+    if (navigator.clipboard) navigator.clipboard.writeText(text).then(done, function () {});
+  });
+});
+</script>
+</body>
+</html>

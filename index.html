@@ -204,6 +204,15 @@ section { padding: 96px 0; }
 .btn-copy { background: var(--bg-2); color: var(--text); border: 1px solid var(--line); }
 .sum { margin: 20px 0 0; padding-top: 16px; border-top: 1px solid var(--line); font: 12.5px/1.6 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; color: var(--muted); word-break: break-all; }
 .sum span { display: block; margin-bottom: 4px; font: 600 12.5px/1.4 Inter, -apple-system, "Segoe UI", Roboto, "Noto Sans", sans-serif; color: var(--text); }
+.support { padding-top: 0; background: var(--bg-2); }
+.give { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 48px auto 0; max-width: 860px; text-align: left; }
+.give .card { padding: 28px; display: flex; flex-direction: column; min-width: 0; }
+.give h3 { font-size: 21px; margin: 16px 0 6px; }
+.give p { flex: 1; margin-bottom: 20px; }
+.give .btn { align-self: flex-start; }
+.give .btn-glass { border-color: var(--line); }
+.c-boosty { background: linear-gradient(180deg, #ff9a3c, #f15f2c); }
+@media (max-width: 600px) { .give { grid-template-columns: 1fr; } }
 .honest {
   margin: 28px auto 0; max-width: 760px; padding: 16px 20px; border-radius: 16px;
   background: var(--glass); border: 1px solid var(--line); color: var(--muted); font-size: 15px; text-align: left;
@@ -249,6 +258,7 @@ footer nav { display: flex; gap: 20px; margin-left: auto; flex-wrap: wrap; }
       <a href="#speed">Скорость</a>
       <a href="#features">Возможности</a>
       <a href="#apps">Приложения</a>
+      <a href="#support">Поддержать</a>
       <a class="btn btn-primary btn-sm" href="#download">Скачать</a>
     </nav>
   </div>
@@ -401,6 +411,27 @@ footer nav { display: flex; gap: 20px; margin-left: auto; flex-wrap: wrap; }
       <p class="honest"><b>Честно о статусе.</b> Пёрышко — молодой проект в активной разработке. Проверка на разных видеокартах, ноутбуках и мониторах ещё идёт. Если что-то не работает, расскажите об этом в <a href="https://github.com/Zumka1991/feather-de/issues">issues на GitHub</a>.</p>
     </div>
   </section>
+
+  <section id="support" class="support">
+    <div class="wrap center">
+      <h2>Поддержите Пёрышко</h2>
+      <p class="lead">Пёрышко бесплатное и открытое и таким останется. Поддержка даёт время на новые возможности и проверку на настоящем железе.</p>
+      <div class="give">
+        <div class="card">
+          <div class="ico c-boosty"><svg viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10Z"/></svg></div>
+          <h3>Подписка на Boosty</h3>
+          <p>Ежемесячная поддержка и новости разработки из первых рук: что готовится в следующей версии.</p>
+          <a class="btn btn-primary" href="https://boosty.to/featheros">Открыть Boosty</a>
+        </div>
+        <div class="card">
+          <div class="ico c-yellow"><svg viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="12" rx="2"/><path d="M3 10h18M7 15h3"/></svg></div>
+          <h3>Разовый донат</h3>
+          <p>Любая сумма картой любого банка через CloudTips от Т-Банка. Регистрация не нужна.</p>
+          <a class="btn btn-glass" href="https://pay.cloudtips.ru/p/235b60f7">Поддержать картой</a>
+        </div>
+      </div>
+    </div>
+  </section>
 </main>
 
 <footer>
@@ -410,6 +441,7 @@ footer nav { display: flex; gap: 20px; margin-left: auto; flex-wrap: wrap; }
     <nav>
       <a href="https://github.com/Zumka1991/feather-de">GitHub</a>
       <a href="https://sourceforge.net/projects/featheros/">SourceForge</a>
+      <a href="#support">Поддержать</a>
       <a href="https://github.com/Zumka1991/feather-de/blob/master/CHANGELOG.md">Что нового</a>
     </nav>
   </div>

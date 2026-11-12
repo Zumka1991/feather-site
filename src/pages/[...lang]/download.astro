@@ -38,7 +38,7 @@ const faqLd = {
         <ul class="ticks">{d.iso.points.map((p) => <li set:html={p} />)}</ul>
         <a class="btn btn-primary" href={iso.url}><Icon name="down" />{d.iso.cta}</a>
         <p class="sum"><span>{d.iso.sum}</span>{iso.sha256}</p>
-        <p class="small muted">{fill(d.iso.note)}</p>
+        {iso.version !== project.version && <p class="small muted">{fill(d.iso.note)}</p>}
       </div>
       <div class="cols-2">
         {(['ubuntu', 'arch'] as const).map((k, i) => (

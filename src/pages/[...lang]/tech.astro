@@ -1,0 +1,106 @@
+---
+import Base from '../../layouts/Base.astro';
+import Icon from '../../components/Icon.astro';
+import { t, langOf, langPaths, GH } from '../../i18n';
+
+export const getStaticPaths = langPaths;
+const lang = langOf(Astro.params.lang);
+const s = t(lang);
+const x = s.tech;
+const build = [
+  'cargo build --release --locked --workspace',
+  'dbus-run-session -- cargo test --release --locked --workspace',
+  'FEATHER_PROFILE=1 target/release/feather-de --windowed',
+].join('\n');
+const tree = `src/                  ${lang === 'en' ? 'compositor, shell, settings, system workers' : 'композитор, оболочка, настройки, системные workers'}
+crates/feather-ui/    ${lang === 'en' ? 'text, drawing, themes, input, scaling, i18n' : 'текст, рисование, темы, ввод, масштаб, локализация'}
+files/ terminal/ notes/ preview/ textedit/ calc/
+protocols/            ${lang === 'en' ? 'extra protocol definitions' : 'дополнительные описания протоколов'}
+session/              ${lang === 'en' ? 'session wrappers, PAM, greetd example' : 'сессионные обёртки, PAM, пример greetd'}
+packaging/            ${lang === 'en' ? 'installers, PKGBUILD, desktop and portal files' : 'установка, PKGBUILD, desktop- и portal-файлы'}
+bench/                ${lang === 'en' ? 'functional scenarios and measurements' : 'функциональные сценарии и измерения'}
+docs/                 ${lang === 'en' ? 'spec, reports and roadmap' : 'спецификация, отчёты и дорожная карта'}`;
+---
+<Base lang={lang} page="tech" path="/tech/">
+  <section class="page-head">
+    <div class="wrap">
+      <span class="eyebrow">{x.eyebrow}</span>
+      <h1 class="h-lg">{x.title}</h1>
+      <p class="lead">{x.lead}</p>
+      <div class="keys" style="gap:8px;margin-top:28px">{x.stack.map((k) => <span class="chip">{k}</span>)}</div>
+    </div>
+  </section>
+
+  <section class="tight" style="padding-bottom:88px">
+    <div class="wrap">
+      <div class="head reveal"><h2 class="h-md">{x.principlesTitle}</h2></div>
+      <div class="cols-2">
+        {x.principles.map((p, i) => (
+          <div class="card reveal" style={`--d:${(i % 2) * 0.07}s`}>
+            <span class="eyebrow" style="margin-bottom:16px">{p.tag}</span>
+            <h3>{p.title}</h3><p>{p.text}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="tight" style="padding-bottom:88px" id="budgets">
+    <div class="wrap">
+      <div class="head reveal"><h2 class="h-md">{x.budgetsTitle}</h2><p class="muted">{x.budgetsLead}</p></div>
+      <div class="card reveal" style="padding:8px 12px">
+        <table class="spec">
+          <thead><tr>{x.budgetsHead.map((h) => <th>{h}</th>)}</tr></thead>
+          <tbody>{x.budgets.map(([a, b, c]) => <tr><td>{a}</td><td class="mono" style="font-size:13.5px">{b}</td><td class="ok">{c}</td></tr>)}</tbody>
+        </table>
+      </div>
+      <p class="note" set:html={x.budgetsNote} />
+    </div>
+  </section>
+
+  <section class="tight" style="padding-bottom:88px" id="parts">
+    <div class="wrap split" style="align-items:start">
+      <div class="reveal">
+        <div class="head" style="margin-bottom:24px"><h2 class="h-md">{x.partsTitle}</h2><p class="muted">{x.partsLead}</p></div>
+        <table class="spec"><tbody>{x.parts.map(([a, b]) => <tr><td class="mono" style="font-size:13px;white-space:nowrap">{a}</td><td>{b}</td></tr>)}</tbody></table>
+      </div>
+      <div class="term reveal" style="--d:.08s">
+        <div class="term-top"><u></u><u></u><u></u>feather-de/</div>
+        <pre>{tree}</pre>
+      </div>
+    </div>
+  </section>
+
+  <section class="tight" style="padding-bottom:88px" id="protocols">
+    <div class="wrap">
+      <div class="head reveal"><h2 class="h-md">{x.protoTitle}</h2></div>
+      <div class="cols-3">
+        {x.proto.map((p, i) => (
+          <div class="card reveal" style={`--d:${i * 0.07}s`}>
+            <h3 style="margin-bottom:16px">{p.title}</h3>
+            <ul class="ticks">{p.items.map((it) => <li>{it}</li>)}</ul>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="tight" id="build">
+    <div class="wrap split" style="align-items:start">
+      <div class="reveal" style="display:grid;gap:18px">
+        <h2 class="h-md">{x.buildTitle}</h2>
+        <p class="muted">{x.buildLead}</p>
+        <pre class="code">{build}</pre>
+        <p class="cta" style="justify-content:flex-start;margin:0">
+          <a class="btn btn-ghost" href={GH}><Icon name="github" />{x.source}</a>
+          <a class="btn btn-ghost" href={`${GH}/blob/master/docs/ROADMAP.md`}>{x.roadmap}</a>
+        </p>
+      </div>
+      <div class="card reveal" style="--d:.08s">
+        <h3>{x.statusTitle}</h3>
+        <p style="margin-bottom:16px">{x.statusLead}</p>
+        <ul class="feat-text"><li style="list-style:none"><ul class="points">{x.status.map((it) => <li>{it}</li>)}</ul></li></ul>
+      </div>
+    </div>
+  </section>
+</Base>

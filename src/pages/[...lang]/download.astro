@@ -1,0 +1,87 @@
+---
+import Base from '../../layouts/Base.astro';
+import Icon from '../../components/Icon.astro';
+import Copy from '../../components/Copy.astro';
+import { t, langOf, langPaths, GH } from '../../i18n';
+import project from '../../data/project.json';
+import iso from '../../data/iso.json';
+import install from '../../data/install.json';
+
+export const getStaticPaths = langPaths;
+const lang = langOf(Astro.params.lang);
+const s = t(lang);
+const d = s.download;
+const size = iso.size[lang];
+const fill = (x: string) => x.replace('{size}', size).replace('{iso}', iso.version).replace('{de}', project.version);
+const src = ['git clone https://github.com/Zumka1991/feather-de.git', 'cd feather-de', './packaging/install-ubuntu.sh'].join('\n');
+const strip = (x: string) => x.replace(/<[^>]+>/g, '');
+const faqLd = {
+  '@context': 'https://schema.org', '@type': 'FAQPage',
+  mainEntity: s.faq.map(([q, a]) => ({ '@type': 'Question', name: q, acceptedAnswer: { '@type': 'Answer', text: strip(a) } })),
+};
+---
+<Base lang={lang} page="download" path="/download/">
+  <script slot="head" type="application/ld+json" set:html={JSON.stringify(faqLd)} />
+  <section class="page-head">
+    <div class="wrap">
+      <span class="eyebrow">{d.eyebrow}</span>
+      <h1 class="h-lg">{d.title}</h1>
+      <p class="lead">{d.lead}</p>
+    </div>
+  </section>
+
+  <section class="tight" style="padding-bottom:72px">
+    <div class="wrap" style="display:grid;gap:18px">
+      <div class="card dl reveal" id="iso">
+        <span class="meta">{fill(d.iso.meta)}</span>
+        <h2 class="h-md">{d.iso.title} {iso.version}</h2>
+        <ul class="ticks">{d.iso.points.map((p) => <li set:html={p} />)}</ul>
+        <a class="btn btn-primary" href={iso.url}><Icon name="down" />{d.iso.cta}</a>
+        <p class="sum"><span>{d.iso.sum}</span>{iso.sha256}</p>
+        <p class="small muted">{fill(d.iso.note)}</p>
+      </div>
+      <div class="cols-2">
+        {(['ubuntu', 'arch'] as const).map((k, i) => (
+          <div class="card dl reveal" id={k} style={`--d:${i * 0.07}s`}>
+            <span class="meta">{d[k].meta}</span>
+            <h3>{d[k].title}</h3>
+            <Copy text={install[k]} label={s.common.copy} done={s.common.copied} />
+            <ul class="ticks">{d[k].points.map((p) => <li set:html={p} />)}</ul>
+          </div>
+        ))}
+      </div>
+      <div class="card dl reveal" id="source">
+        <h3>{d.source.title}</h3>
+        <p>{d.source.text}</p>
+        <pre class="code">{src}</pre>
+        <a href={`${GH}#${lang === 'en' ? 'readme' : 'сборка-и-установка'}`}>{d.source.link} →</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="tight" style="padding-bottom:72px">
+    <div class="wrap">
+      <div class="head reveal"><h2 class="h-md">{d.stepsTitle}</h2></div>
+      <div class="steps">{d.steps.map((x, i) => <div class="card reveal" style={`--d:${i * 0.07}s`}><h3>{x.title}</h3><p>{fill(x.text)}</p></div>)}</div>
+    </div>
+  </section>
+
+  <section class="tight" style="padding-bottom:72px">
+    <div class="wrap split" style="align-items:start">
+      <div class="reveal">
+        <h2 class="h-md" style="margin-bottom:20px">{d.reqTitle}</h2>
+        <table class="spec"><tbody>{d.req.map(([a, b]) => <tr><td>{a}</td><td>{b}</td></tr>)}</tbody></table>
+      </div>
+      <p class="callout reveal" style="--d:.08s" set:html={d.honest} />
+    </div>
+  </section>
+
+  <section class="tight" id="faq">
+    <div class="narrow">
+      <div class="head reveal"><h2 class="h-md">{d.faqTitle}</h2></div>
+      <div class="faq reveal">
+        {s.faq.map(([q, a]) => <details><summary>{q}</summary><p set:html={a} /></details>)}
+      </div>
+    </div>
+  </section>
+</Base>

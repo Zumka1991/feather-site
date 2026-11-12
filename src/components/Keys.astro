@@ -1,0 +1,6 @@
+---
+// Сочетание клавиш: «Super + Alt + P» → отдельные клавиши.
+const { combo } = Astro.props;
+const parts = String(combo).split(' + ');
+---
+<span class="keys">{parts.map((k, i) => (<>{i > 0 && <i>+</i>}<kbd>{k}</kbd></>))}</span>

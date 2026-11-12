@@ -1,0 +1,66 @@
+---
+import Base from '../../layouts/Base.astro';
+import Icon from '../../components/Icon.astro';
+import Keys from '../../components/Keys.astro';
+import Shot from '../../components/Shot.astro';
+import { t, href, langOf, langPaths } from '../../i18n';
+
+export const getStaticPaths = langPaths;
+const lang = langOf(Astro.params.lang);
+const s = t(lang);
+const f = s.features;
+---
+<Base lang={lang} page="features" path="/features/">
+  <section class="page-head">
+    <div class="wrap">
+      <span class="eyebrow">{f.eyebrow}</span>
+      <h1 class="h-lg">{f.title}</h1>
+      <p class="lead">{f.lead}</p>
+      <p style="margin-top:28px"><a class="btn btn-ghost" href={href(lang, '/guide/')}><Icon name="book" />{f.guideCta}</a></p>
+    </div>
+  </section>
+  <nav class="subnav" aria-label={f.eyebrow}>
+    <div class="wrap">{f.sections.map((x) => <a href={`#${x.id}`}>{x.nav}</a>)}<a href="#apps">{s.home.apps.eyebrow}</a></div>
+  </nav>
+  <div class="wrap">
+    {f.sections.map((x, i) => (
+      <section class="feat" id={x.id} style={i === 0 ? 'border-top:0' : ''}>
+        <div class="feat-text reveal">
+          <span class="eyebrow">{x.tag}</span>
+          <h2 class="h-md">{x.title}</h2>
+          <p class="muted">{x.lead}</p>
+          <ul class="points">{x.points.map((p) => <li set:html={p} />)}</ul>
+          {x.keys && <ul class="klist">{x.keys.map(([c, l]) => <li><span>{l}</span><Keys combo={c} /></li>)}</ul>}
+        </div>
+        {x.shots.length > 0
+          ? <div class:list={['shots reveal', { two: x.shots.length > 1 }]} style="--d:.08s">{x.shots.map(([file, alt]) => <Shot lang={lang} file={file} alt={alt} eager={i === 0} />)}</div>
+          : <div class="card reveal" style="--d:.08s"><div class="keys" style="gap:8px">{['Flatpak', 'Snap', 'Steam', 'Proton', 'Wine', 'XWayland', 'VRR', 'Direct Scanout', 'layer-shell'].map((k) => <span class="chip">{k}</span>)}</div></div>}
+      </section>
+    ))}
+    <section class="feat" id="apps" style="display:block">
+      <div class="head reveal">
+        <span class="eyebrow">12 — {s.home.apps.eyebrow}</span>
+        <h2 class="h-md">{s.home.apps.title}</h2>
+        <p class="muted">{s.home.apps.lead}</p>
+      </div>
+      <div class="apps">
+        {s.apps.map((a, i) => (
+          <div class="card app reveal" style={`--d:${(i % 4) * 0.06}s`}>
+            <div class="app-ico" style={`--c1:${a.c[0]};--c2:${a.c[1]}`}><Icon name={a.id} /></div>
+            <h3>{a.name}</h3><code>{a.bin}</code><p>{a.text}</p>
+          </div>
+        ))}
+      </div>
+    </section>
+  </div>
+  <section class="tight" style="padding-top:40px">
+    <div class="wrap"><div class="band reveal">
+      <h2 class="h-lg">{s.home.get.title}</h2>
+      <p class="lead">{s.home.get.lead}</p>
+      <div class="cta" style="margin:8px 0 0">
+        <a class="btn btn-primary" href={href(lang, '/download/')}><Icon name="down" />{s.nav.download}</a>
+        <a class="btn btn-ghost" href={href(lang, '/guide/')}>{f.guideCta}</a>
+      </div>
+    </div></div>
+  </section>
+</Base>

@@ -1,0 +1,199 @@
+---
+import Base from '../../layouts/Base.astro';
+import Icon from '../../components/Icon.astro';
+import Keys from '../../components/Keys.astro';
+import Modes from '../../components/Modes.astro';
+import { t, href, langOf, langPaths, GH } from '../../i18n';
+import project from '../../data/project.json';
+import iso from '../../data/iso.json';
+import install from '../../data/install.json';
+
+export const getStaticPaths = langPaths;
+const lang = langOf(Astro.params.lang);
+const s = t(lang);
+const h = s.home;
+const wallOrder = ['dawn', 'aurora', 'lake', 'waves', 'dunes', 'ridges', 'emerald', 'graphite'];
+const ringDots = ['#3d8bff', '#ff9f0a', '#30d158', '#bf5af2', '#ff453a', '#64d2ff', '#ffd60a', '#8e8e93'];
+const jsonld = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    { '@type': 'WebSite', '@id': 'https://featheros.ru/#site', url: 'https://featheros.ru/', name: 'Feather OS', alternateName: ['Пёрышко', 'Пёрышко OS', 'FeatherOS'], inLanguage: ['ru', 'en'] },
+    {
+      '@type': 'SoftwareApplication', '@id': 'https://featheros.ru/#os', name: 'Feather OS', alternateName: ['Пёрышко OS', 'Пёрышко', 'Feather DE'],
+      description: s.meta.home.desc, url: 'https://featheros.ru/', applicationCategory: 'DesktopEnhancementApplication', operatingSystem: 'Linux',
+      processorRequirements: 'x86_64', softwareVersion: project.version, downloadUrl: iso.url,
+      license: 'https://www.gnu.org/licenses/gpl-3.0.html', isAccessibleForFree: true, image: 'https://featheros.ru/img/og.jpg',
+      offers: { '@type': 'Offer', price: '0', priceCurrency: 'RUB' },
+      sameAs: [GH, 'https://sourceforge.net/projects/featheros/', 'https://boosty.to/featheros'],
+    },
+  ],
+};
+---
+<Base lang={lang} page="home" path="/">
+  <script slot="head" type="application/ld+json" set:html={JSON.stringify(jsonld)} />
+
+  <section class="hero">
+    <div class="wrap">
+      <a class="chip" href={href(lang, '/changelog/')}><span class="dot"></span><b>v{project.version}</b>{h.chip}</a>
+      <h1 class="h-xl">{h.h1a} <span class="grad">{h.h1b}</span></h1>
+      <p class="lead">{h.lead}</p>
+      <div class="cta">
+        <a class="btn btn-primary" href={href(lang, '/download/')}><Icon name="down" />{h.cta1}</a>
+        <a class="btn btn-ghost" href={href(lang, '/guide/')}><Icon name="book" />{h.cta2}</a>
+      </div>
+      <div class="cmd"><code>{install.ubuntu}</code><button type="button" data-copy={install.ubuntu} data-done={s.common.copied}>{s.common.copy}</button></div>
+      <div class="stage">
+        <div class="frame">
+          <img src={`/shots/${lang}/01-desktop.webp`} srcset={`/shots/${lang}/01-desktop-800.webp 800w, /shots/${lang}/01-desktop.webp 1600w`}
+            sizes="(max-width: 1200px) 100vw, 1186px" width="1600" height="1000" alt={h.shotAlt} fetchpriority="high" />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="speed">
+    <div class="wrap">
+      <div class="head reveal">
+        <span class="eyebrow">{h.speed.eyebrow}</span>
+        <h2 class="h-lg">{h.speed.title}</h2>
+        <p class="lead">{h.speed.lead}</p>
+      </div>
+      <div class="metrics reveal">
+        {h.speed.items.map((m) => (
+          <div class="metric">
+            <span class="lbl">{m.lbl}</span>
+            <span class="val">{m.val}<small>{m.unit}</small></span>
+            <div class="gauge" style={`--v:${m.v}`}><i></i></div>
+            <div class="budget"><span>{h.speed.budget} {m.budget}</span><b>{m.got}</b></div>
+            <p>{m.text}</p>
+          </div>
+        ))}
+      </div>
+      <p class="note" set:html={h.speed.note} />
+    </div>
+  </section>
+
+  <section id="modes" class="tight">
+    <div class="wrap">
+      <div class="head reveal">
+        <span class="eyebrow">{h.modes.eyebrow}</span>
+        <h2 class="h-lg">{h.modes.title}</h2>
+        <p class="lead">{h.modes.lead}</p>
+      </div>
+      <Modes lang={lang} />
+    </div>
+  </section>
+
+  <section id="features">
+    <div class="wrap">
+      <div class="head reveal">
+        <span class="eyebrow">{h.bento.eyebrow}</span>
+        <h2 class="h-lg">{h.bento.title}</h2>
+        <p class="lead">{h.bento.lead}</p>
+      </div>
+      <div class="bento">
+        {h.bento.items.map((b, i) => (
+          <a class:list={['card tile hover reveal', b.cls]} href={href(lang, '/features/')} style={`--d:${(i % 3) * 0.07}s`}>
+            <span class="tag">{b.tag}</span>
+            <h3>{b.title}</h3>
+            <p>{b.text}</p>
+            {b.keys && <Keys combo={b.keys} />}
+            {b.shot && <figure><img src={`/shots/${lang}/${b.shot}.webp`} srcset={`/shots/${lang}/${b.shot}-800.webp 800w, /shots/${lang}/${b.shot}.webp 1600w`} sizes="(max-width: 640px) 100vw, 600px" width="1600" height="1000" alt="" loading="lazy" style={`--pos:${b.pos}`} /></figure>}
+            {b.ring && (
+              <svg class="ring" viewBox="0 0 200 120" aria-hidden="true" style="margin:auto auto 0;width:min(100%,260px)">
+                <circle cx="100" cy="60" r="44" fill="none" stroke="currentColor" stroke-opacity=".14" stroke-width="22" />
+                {ringDots.map((c, n) => {
+                  const a = (n / ringDots.length) * Math.PI * 2 - Math.PI / 2;
+                  return <rect x={100 + Math.cos(a) * 44 - 8} y={60 + Math.sin(a) * 44 - 8} width="16" height="16" rx="5" fill={c} />;
+                })}
+                <path d="M96 52v16l4-3.5 3 6.5 2.6-1.2-3-6.3h5.4z" fill="currentColor" />
+              </svg>
+            )}
+          </a>
+        ))}
+      </div>
+      <p style="margin-top:32px"><a class="btn btn-ghost" href={href(lang, '/features/')}>{s.common.all}<Icon name="arrow" /></a></p>
+    </div>
+  </section>
+
+  <section id="apps" class="tight">
+    <div class="wrap">
+      <div class="head reveal">
+        <span class="eyebrow">{h.apps.eyebrow}</span>
+        <h2 class="h-lg">{h.apps.title}</h2>
+        <p class="lead">{h.apps.lead}</p>
+      </div>
+      <div class="apps">
+        {s.apps.map((a, i) => (
+          <div class="card app reveal" style={`--d:${(i % 4) * 0.06}s`}>
+            <div class="app-ico" style={`--c1:${a.c[0]};--c2:${a.c[1]}`}><Icon name={a.id} /></div>
+            <h3>{a.name}</h3>
+            <code>{a.bin}</code>
+            <p>{a.text}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section id="cli" class="tight">
+    <div class="wrap split">
+      <div class="head reveal" style="margin:0">
+        <span class="eyebrow">{h.ctl.eyebrow}</span>
+        <h2 class="h-lg">{h.ctl.title}</h2>
+        <p class="lead" set:html={h.ctl.lead} />
+        <p><a class="btn btn-ghost" href={`${GH}/blob/master/docs/API.md`}>{h.ctl.link}<Icon name="arrow" /></a></p>
+      </div>
+      <div class="term reveal" style="--d:.1s">
+        <div class="term-top"><u></u><u></u><u></u>featherctl</div>
+        <pre>{h.ctl.lines.map(([c, n]) => (<><span class="p">$ </span>{c}{n && <span class="c">{'  # ' + n}</span>}{'\n'}</>))}<span class="o">{h.ctl.out}</span></pre>
+      </div>
+    </div>
+  </section>
+
+  <section id="wallpapers" class="tight">
+    <div class="wrap">
+      <div class="head reveal">
+        <span class="eyebrow">{h.walls.eyebrow}</span>
+        <h2 class="h-lg">{h.walls.title}</h2>
+        <p class="lead">{h.walls.lead}</p>
+      </div>
+      <div class="walls reveal">
+        {wallOrder.filter((w) => project.wallpapers.includes(w)).map((w) => (
+          <figure><img src={`/walls/${w}-640.webp`} width="640" height="360" loading="lazy" alt={s.wallNames[w]} /><figcaption>{s.wallNames[w]}</figcaption></figure>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section id="download" class="tight">
+    <div class="wrap">
+      <div class="band reveal">
+        <h2 class="h-lg">{h.get.title}</h2>
+        <p class="lead">{h.get.lead}</p>
+        <div class="cta" style="margin:8px 0 0">
+          <a class="btn btn-primary" href={iso.url}><Icon name="down" />{h.get.cta1}</a>
+          <a class="btn btn-ghost" href={href(lang, '/download/')}>{h.get.cta2}</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="support" class="tight">
+    <div class="wrap">
+      <div class="head reveal">
+        <span class="eyebrow">{h.join.eyebrow}</span>
+        <h2 class="h-lg">{h.join.title}</h2>
+      </div>
+      <div class="cols-3">
+        {h.join.cards.map((c, i) => (
+          <a class="card hover reveal" href={c.href} style={`--d:${i * 0.07}s;color:inherit`}>
+            <h3>{c.title}</h3>
+            <p>{c.text}</p>
+            <p style="margin-top:18px;color:var(--accent);font-weight:600;font-size:15px">{c.cta} →</p>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+</Base>

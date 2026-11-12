@@ -1,0 +1,4 @@
+---
+const { text, label, done, cls = 'codeline' } = Astro.props;
+---
+<div class={cls}><code>{text}</code><button type="button" data-copy={text} data-done={done}>{label}</button></div>

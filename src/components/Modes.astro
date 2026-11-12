@@ -1,0 +1,90 @@
+---
+// Интерактивное демо трёх режимов рабочего стола.
+import Icon from './Icon.astro';
+import Keys from './Keys.astro';
+import { t } from '../i18n';
+const { lang } = Astro.props;
+const m = t(lang).home.modes;
+const modes = ['free', 'tile', 'tape'] as const;
+const wins = [
+  { f: [6, 12, 44, 52], tl: [1.5, 7.5, 48, 77.5], z: 2, dark: true },
+  { f: [34, 25, 40, 47], tl: [50.5, 7.5, 48, 38], z: 4 },
+  { f: [56, 11, 37, 41], tl: [50.5, 47, 23.5, 38], z: 1 },
+  { f: [14, 45, 33, 37], tl: [75, 47, 23.5, 38], z: 3 },
+];
+const dock = ['#3d8bff', '#ff9f0a', '#30d158', '#bf5af2', '#ff453a', '#64d2ff', '#8e8e93'];
+---
+<div class="modes" data-modes>
+  <div class="desk reveal" data-mode="free" style="--s:0">
+    <div class="desk-bar"><span>{m.bar[0]}</span>{m.bar.slice(1).map((b) => <span>{b}</span>)}<span class="pill" data-pill>{m.tabs.free}</span></div>
+    {wins.map((w, i) => (
+      <div class:list={['win', { dark: w.dark, on: i === 1 }]}
+        style={`--i:${i};--z:${w.z};--fx:${w.f[0]};--fy:${w.f[1]};--fw:${w.f[2]};--fh:${w.f[3]};--tx:${w.tl[0]};--ty:${w.tl[1]};--tw:${w.tl[2]};--th:${w.tl[3]}`}>
+        <div class="win-top"><u></u><u></u><u></u>{m.wins[i]}</div>
+        <div class="win-body">
+          {i === 0 && <><s class="c" style="--w:38%;--c:#54e0a0"></s><s style="--w:72%"></s><s style="--w:56%"></s><s class="c" style="--w:30%;--c:#5cabff"></s><s style="--w:80%"></s><s style="--w:44%"></s></>}
+          {i === 1 && <div class="tiles">{['#58a6ff', '#58a6ff', '#ffb340', '#58a6ff', '#30d158', '#58a6ff', '#bf5af2', '#58a6ff'].map((c) => <b style={`--c:${c}`}></b>)}</div>}
+          {i === 2 && <><s class="c" style="--w:100%;--c:#e3e8f4"></s><s style="--w:60%"></s><s style="--w:90%"></s><s style="--w:75%"></s><s class="c" style="--w:34%;--c:#1f7bff"></s></>}
+          {i === 3 && <><s class="c" style="--w:50%;--c:#ffcc00"></s><s style="--w:85%"></s><s style="--w:70%"></s><s style="--w:40%"></s></>}
+        </div>
+      </div>
+    ))}
+    <div class="desk-dock">{dock.map((c) => <i style={`--c:${c}`}></i>)}</div>
+    <div class="tape-nav"><button type="button" data-tape="-1" aria-label="←">←</button><button type="button" data-tape="1" aria-label="→">→</button></div>
+    <div class="hud" data-hud aria-hidden="true">
+      {modes.map((k) => <span data-hud-icon={k} hidden={k !== 'free'}><Icon name={k} /></span>)}
+      <div><span data-hud-title>{m.hud.free[0]}</span><small data-hud-sub>{m.hud.free[1]}</small></div>
+    </div>
+  </div>
+  <div class="mode-text reveal" style="--d:.1s">
+    <div class="seg" role="tablist">
+      {modes.map((k) => <button type="button" role="tab" aria-selected={k === 'free' ? 'true' : 'false'} data-mode-btn={k}>{m.tabs[k]}</button>)}
+    </div>
+    {modes.map((k) => (
+      <div data-panel={k} hidden={k !== 'free'} data-hud-t={m.hud[k][0]} data-hud-s={m.hud[k][1]} data-pill-t={m.tabs[k]}>
+        <h3>{m.panels[k].title}</h3>
+        <p class="muted">{m.panels[k].text}</p>
+        <ul>{m.panels[k].keys.map(([c, l]) => <li><span>{l}</span><Keys combo={c} /></li>)}</ul>
+      </div>
+    ))}
+  </div>
+</div>
+<script>
+  document.querySelectorAll<HTMLElement>('[data-modes]').forEach((box) => {
+    const desk = box.querySelector<HTMLElement>('.desk')!;
+    const hud = box.querySelector<HTMLElement>('[data-hud]')!;
+    const wins = [...box.querySelectorAll<HTMLElement>('.win')];
+    const navs = [...box.querySelectorAll<HTMLButtonElement>('[data-tape]')];
+    let s = 0, timer = 0;
+    const maxS = wins.length - 2;
+    const scroll = (to: number) => {
+      s = Math.max(0, Math.min(maxS, to));
+      desk.style.setProperty('--s', String(s));
+      navs[0].disabled = s === 0; navs[1].disabled = s === maxS;
+    };
+    const focus = (i: number) => wins.forEach((w, n) => w.classList.toggle('on', n === i));
+    const set = (mode: string) => {
+      desk.dataset.mode = mode;
+      box.querySelectorAll<HTMLElement>('[data-mode-btn]').forEach((b) => b.setAttribute('aria-selected', String(b.dataset.modeBtn === mode)));
+      box.querySelectorAll<HTMLElement>('[data-panel]').forEach((p) => {
+        p.hidden = p.dataset.panel !== mode;
+        if (!p.hidden) {
+          box.querySelector('[data-hud-title]')!.textContent = p.dataset.hudT!;
+          box.querySelector('[data-hud-sub]')!.textContent = p.dataset.hudS!;
+          box.querySelector('[data-pill]')!.textContent = p.dataset.pillT!;
+        }
+      });
+      box.querySelectorAll<HTMLElement>('[data-hud-icon]').forEach((i) => (i.hidden = i.dataset.hudIcon !== mode));
+      hud.classList.add('show');
+      clearTimeout(timer);
+      timer = window.setTimeout(() => hud.classList.remove('show'), 1200);
+    };
+    box.querySelectorAll<HTMLElement>('[data-mode-btn]').forEach((b) => b.addEventListener('click', () => set(b.dataset.modeBtn!)));
+    navs.forEach((b) => b.addEventListener('click', () => scroll(s + Number(b.dataset.tape))));
+    wins.forEach((w, i) => w.addEventListener('click', () => {
+      focus(i);
+      if (desk.dataset.mode === 'tape') scroll(i > s + 1 ? i - 1 : i < s ? i : s);
+    }));
+    scroll(0);
+  });
+</script>

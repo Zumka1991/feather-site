@@ -1,0 +1,5 @@
+{
+  "ubuntu": "curl -fsSL https://zumka1991.github.io/feather-de/install.sh | bash",
+  "arch": "curl -fsSL https://zumka1991.github.io/feather-de/arch/install.sh | bash",
+  "giscus": { "repoId": "", "categoryId": "", "category": "General" }
+}

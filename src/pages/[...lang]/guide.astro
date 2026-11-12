@@ -1,0 +1,68 @@
+---
+import Base from '../../layouts/Base.astro';
+import { t, langOf, langPaths, GH } from '../../i18n';
+import * as ru from '../../content/guide.ru.md';
+import * as en from '../../content/guide.en.md';
+import project from '../../data/project.json';
+
+export const getStaticPaths = langPaths;
+const lang = langOf(Astro.params.lang);
+const s = t(lang);
+const doc = lang === 'en' ? en : ru;
+const { Content } = doc;
+const toc = doc.getHeadings().filter((h) => h.depth === 2);
+const L = lang === 'en'
+  ? { eyebrow: 'Guide', filter: 'Find on this page…', edit: 'Edit on GitHub', ver: 'for version' }
+  : { eyebrow: 'Руководство', filter: 'Найти на странице…', edit: 'Править на GitHub', ver: 'для версии' };
+const file = lang === 'en' ? 'USER_GUIDE.en.md' : 'USER_GUIDE.md';
+---
+<Base lang={lang} page="guide" path="/guide/">
+  <section class="page-head">
+    <div class="wrap">
+      <span class="eyebrow">{L.eyebrow}</span>
+      <h1 class="h-lg">{s.meta.guide.title}</h1>
+      <p class="lead">{s.meta.guide.desc}</p>
+      <p class="small muted mono" style="margin-top:20px">{L.ver} {project.version} · <a href={`${GH}/blob/master/docs/${file}`}>{L.edit}</a></p>
+    </div>
+  </section>
+  <div class="wrap doc">
+    <nav class="toc" aria-label={L.eyebrow}>
+      <input type="search" placeholder={L.filter} aria-label={L.filter} data-filter />
+      {toc.map((h) => <a href={`#${h.slug}`}>{h.text.replace(/\s*\([^)]*\)/g, '')}</a>)}
+    </nav>
+    <article class="prose" data-doc><Content /></article>
+  </div>
+  <script>
+    // Подсветка текущего раздела в оглавлении
+    const links = [...document.querySelectorAll<HTMLAnchorElement>('.toc a')];
+    const map = new Map(links.map((a) => [decodeURIComponent(a.hash.slice(1)), a]));
+    const heads = [...document.querySelectorAll<HTMLElement>('.prose h2[id]')];
+    let ticking = false;
+    const mark = () => {
+      ticking = false;
+      let cur = heads[0];
+      for (const h of heads) if (h.getBoundingClientRect().top < 140) cur = h;
+      links.forEach((a) => a.classList.toggle('on', a === map.get(cur?.id)));
+    };
+    addEventListener('scroll', () => { if (!ticking) { ticking = true; requestAnimationFrame(mark); } }, { passive: true });
+    mark();
+
+    // Поиск по странице: прячет блоки, в которых нет запроса
+    const doc = document.querySelector<HTMLElement>('[data-doc]')!;
+    const input = document.querySelector<HTMLInputElement>('[data-filter]')!;
+    const blocks = [...doc.children] as HTMLElement[];
+    input.addEventListener('input', () => {
+      const q = input.value.trim().toLowerCase();
+      let section: HTMLElement | null = null, hit = false;
+      const flush = () => { if (section) section.hidden = q !== '' && !hit; };
+      for (const b of blocks) {
+        if (b.tagName === 'H2') { flush(); section = b; hit = b.textContent!.toLowerCase().includes(q); continue; }
+        if (b.tagName === 'HR') { b.hidden = true; continue; }
+        const ok = q === '' || b.textContent!.toLowerCase().includes(q);
+        b.hidden = !ok;
+        if (ok) hit = true;
+      }
+      flush();
+    });
+  </script>
+</Base>

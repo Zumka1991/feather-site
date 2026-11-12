@@ -1,0 +1,83 @@
+---
+import Base from '../../layouts/Base.astro';
+import Icon from '../../components/Icon.astro';
+import { t, langOf, langPaths, GH } from '../../i18n';
+import install from '../../data/install.json';
+
+export const getStaticPaths = langPaths;
+const lang = langOf(Astro.params.lang);
+const s = t(lang);
+const c = s.community;
+const g = install.giscus;
+---
+<Base lang={lang} page="community" path="/community/">
+  <section class="page-head">
+    <div class="wrap">
+      <span class="eyebrow">{c.eyebrow}</span>
+      <h1 class="h-lg">{c.title}</h1>
+      <p class="lead">{c.lead}</p>
+      <p style="margin-top:28px"><a class="btn btn-primary" href={`${GH}/discussions`}><Icon name="github" />{c.forumCta}</a></p>
+    </div>
+  </section>
+
+  <section class="tight" style="padding-bottom:88px" id="forum">
+    <div class="wrap">
+      <div class="bento">
+        {c.cats.map((k, i) => (
+          <a class:list={['card hover reveal', i < 2 ? 'w3' : '']} href={`${GH}/discussions/categories/${k.slug}`} style={`--d:${(i % 3) * 0.06}s;color:inherit`}>
+            <span class="eyebrow" style="margin-bottom:14px">0{i + 1}</span>
+            <h3>{k.title}</h3><p>{k.text}</p>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="tight" style="padding-bottom:88px" id="bugs">
+    <div class="wrap split" style="align-items:start">
+      <div class="reveal" style="display:grid;gap:18px;justify-items:start">
+        <h2 class="h-md">{c.bugTitle}</h2>
+        <p class="muted">{c.bugLead}</p>
+        <a class="btn btn-ghost" href={`${GH}/issues/new/choose`}>{c.bugCta}<Icon name="arrow" /></a>
+      </div>
+      <div class="card reveal" style="--d:.08s">
+        <h3 style="margin-bottom:16px">{c.bugListTitle}</h3>
+        <ul class="ticks">{c.bugList.map((b) => <li>{b}</li>)}</ul>
+        <p class="small" style="margin-top:16px">{c.bugNote}</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="tight" style="padding-bottom:88px" id="contribute">
+    <div class="wrap">
+      <div class="head reveal"><h2 class="h-md">{c.helpTitle}</h2></div>
+      <div class="cols-3">{c.help.map((x, i) => <div class="card reveal" style={`--d:${i * 0.07}s`}><h3>{x.title}</h3><p>{x.text}</p></div>)}</div>
+    </div>
+  </section>
+
+  <section class="tight" id="support">
+    <div class="wrap">
+      <div class="head reveal"><h2 class="h-md">{c.supportTitle}</h2><p class="muted">{c.supportLead}</p></div>
+      <div class="cols-2">
+        {c.support.map((x, i) => (
+          <div class="card dl reveal" style={`--d:${i * 0.07}s`}>
+            <h3>{x.title}</h3><p>{x.text}</p>
+            <a class:list={['btn', i === 0 ? 'btn-primary' : 'btn-ghost']} href={x.href}>{x.cta}</a>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  {g.repoId && g.categoryId && (
+    <section class="tight" id="comments">
+      <div class="narrow">
+        <div class="head"><h2 class="h-md">{c.comments}</h2></div>
+        <script is:inline src="https://giscus.app/client.js" data-repo="Zumka1991/feather-de" data-repo-id={g.repoId}
+          data-category={g.category} data-category-id={g.categoryId} data-mapping="pathname" data-strict="1"
+          data-reactions-enabled="1" data-input-position="top" data-theme="preferred_color_scheme" data-lang={lang}
+          data-loading="lazy" crossorigin="anonymous" async></script>
+      </div>
+    </section>
+  )}
+</Base>

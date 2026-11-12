@@ -1,0 +1,164 @@
+---
+import '@fontsource-variable/inter';
+import '@fontsource/jetbrains-mono/400.css';
+import '@fontsource/jetbrains-mono/500.css';
+import '../styles/global.css';
+import Icon from '../components/Icon.astro';
+import { t, href, GH, type Lang } from '../i18n';
+import project from '../data/project.json';
+
+interface Props { lang: Lang; page: 'home' | 'features' | 'guide' | 'download' | 'tech' | 'changelog' | 'community'; path: string }
+const { lang, page, path } = Astro.props;
+const s = t(lang);
+const meta = s.meta[page];
+const other: Lang = lang === 'ru' ? 'en' : 'ru';
+const site = 'https://featheros.ru';
+const url = site + href(lang, path);
+const links = [
+  ['features', '/features/'],
+  ['guide', '/guide/'],
+  ['tech', '/tech/'],
+  ['changelog', '/changelog/'],
+  ['community', '/community/'],
+] as const;
+---
+<!doctype html>
+<html lang={lang} data-theme="dark">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{meta.title}</title>
+  <meta name="description" content={meta.desc} />
+  <link rel="canonical" href={url} />
+  <link rel="alternate" hreflang="ru" href={site + path} />
+  <link rel="alternate" hreflang="en" href={site + '/en' + path} />
+  <link rel="alternate" hreflang="x-default" href={site + path} />
+  <meta property="og:site_name" content="Feather OS" />
+  <meta property="og:locale" content={s.locale} />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content={url} />
+  <meta property="og:title" content={meta.title} />
+  <meta property="og:description" content={meta.desc} />
+  <meta property="og:image" content={site + '/img/og.jpg'} />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="theme-color" content="#05070d" />
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  <link rel="icon" href="/favicon.ico" sizes="48x48" />
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+  <script is:inline>
+    document.documentElement.classList.add('js');
+    try { if (localStorage.getItem('theme') === 'light') document.documentElement.dataset.theme = 'light'; } catch (e) {}
+  </script>
+  <slot name="head" />
+</head>
+<body>
+  <header class="nav">
+    <div class="wrap">
+      <a class="brand" href={href(lang, '/')}><img src="/favicon.svg" alt="" width="28" height="28" />{s.name}</a>
+      <nav class="nav-links" aria-label={s.nav.menu}>
+        {links.map(([key, p]) => <a href={href(lang, p)} aria-current={page === key ? 'page' : undefined}>{s.nav[key]}</a>)}
+      </nav>
+      <div class="nav-tools">
+        <a class="icon-btn" href={href(other, path)} hreflang={other} title={s.nav.otherLabel} aria-label={s.nav.otherLabel}>{s.nav.other}</a>
+        <button class="icon-btn theme-btn" type="button" title={s.nav.theme} aria-label={s.nav.theme}>
+          <span class="moon"><Icon name="moon" /></span><span class="sun"><Icon name="sun" /></span>
+        </button>
+        <a class="icon-btn" href={GH} title="GitHub" aria-label="GitHub"><Icon name="github" /></a>
+        <a class="btn btn-primary btn-sm" href={href(lang, '/download/')}>{s.nav.download}</a>
+        <button class="icon-btn burger" type="button" aria-label={s.nav.menu} aria-expanded="false"><Icon name="menu" /></button>
+      </div>
+    </div>
+  </header>
+
+  <main><slot /></main>
+
+  <footer>
+    <div class="wrap">
+      <div class="foot">
+        <div>
+          <a class="brand" href={href(lang, '/')}><img src="/favicon.svg" alt="" width="28" height="28" />{s.name}</a>
+          <p style="margin-top:14px;max-width:34ch">{s.footer.about}</p>
+        </div>
+        <div>
+          <h4>{s.footer.product}</h4>
+          <ul>
+            <li><a href={href(lang, '/features/')}>{s.nav.features}</a></li>
+            <li><a href={href(lang, '/download/')}>{s.nav.download}</a></li>
+            <li><a href={href(lang, '/changelog/')}>{s.nav.changelog}</a></li>
+            <li><a href={href(lang, '/tech/')}>{s.nav.tech}</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>{s.footer.resources}</h4>
+          <ul>
+            <li><a href={href(lang, '/guide/')}>{s.nav.guide}</a></li>
+            <li><a href={GH}>GitHub</a></li>
+            <li><a href="https://sourceforge.net/projects/featheros/">SourceForge</a></li>
+            <li><a href={`${GH}/blob/master/docs/API.md`}>D-Bus API</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>{s.footer.people}</h4>
+          <ul>
+            <li><a href={href(lang, '/community/')}>{s.footer.forum}</a></li>
+            <li><a href={`${GH}/issues/new/choose`}>{s.footer.bugs}</a></li>
+            <li><a href={href(lang, '/community/') + '#support'}>{s.footer.support}</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="foot-note">
+        <span>{s.name} {project.version} · {s.footer.license}</span>
+        <span>featheros.ru</span>
+      </div>
+    </div>
+  </footer>
+
+  <dialog class="viewer" aria-label={s.common.close}>
+    <img alt="" /><p></p>
+    <button type="button" aria-label={s.common.close}>×</button>
+  </dialog>
+
+  <script>
+    const root = document.documentElement;
+    // Тема
+    document.querySelector('.theme-btn')?.addEventListener('click', () => {
+      const next = root.dataset.theme === 'light' ? 'dark' : 'light';
+      root.dataset.theme = next;
+      try { localStorage.setItem('theme', next); } catch {}
+    });
+    // Мобильное меню
+    const nav = document.querySelector('.nav');
+    const burger = document.querySelector<HTMLButtonElement>('.burger');
+    burger?.addEventListener('click', () => {
+      burger.setAttribute('aria-expanded', String(nav!.classList.toggle('open')));
+    });
+    // Копирование команд
+    document.querySelectorAll<HTMLButtonElement>('[data-copy]').forEach((b) => {
+      const label = b.textContent;
+      b.addEventListener('click', async () => {
+        try { await navigator.clipboard.writeText(b.dataset.copy!); } catch { return; }
+        b.textContent = b.dataset.done || '✓';
+        setTimeout(() => (b.textContent = label), 1600);
+      });
+    });
+    // Появление при прокрутке
+    const io = new IntersectionObserver((es) => es.forEach((e) => {
+      if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
+    }), { rootMargin: '0px 0px -8% 0px' });
+    document.querySelectorAll('.reveal').forEach((el) => io.observe(el));
+    // Просмотр снимков
+    const v = document.querySelector<HTMLDialogElement>('.viewer');
+    if (v?.showModal) {
+      const img = v.querySelector('img')!, cap = v.querySelector('p')!;
+      const open = (src: string, alt: string) => { img.src = src; img.alt = alt; cap.textContent = alt; v.showModal(); };
+      document.querySelectorAll<HTMLAnchorElement>('a[data-zoom]').forEach((a) => a.addEventListener('click', (e) => {
+        e.preventDefault(); open(a.href, a.dataset.zoom || '');
+      }));
+      document.querySelectorAll<HTMLImageElement>('.prose img').forEach((i) => i.addEventListener('click', () => open(i.currentSrc || i.src, i.alt)));
+      v.addEventListener('click', () => v.close());
+    }
+  </script>
+</body>
+</html>

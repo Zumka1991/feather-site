@@ -1,0 +1,19 @@
+{
+  "name": "feather-site",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "sync": "node scripts/sync.mjs",
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview"
+  },
+  "dependencies": {
+    "@astrojs/sitemap": "^3",
+    "@fontsource-variable/inter": "^5",
+    "@fontsource/jetbrains-mono": "^5",
+    "astro": "^7",
+    "marked": "^16",
+    "sharp": "^0.34"
+  }
+}

@@ -181,7 +181,7 @@ kbd {
 .brand:hover { text-decoration: none; }
 .brand img { width: 28px; height: 28px; border-radius: 8px; }
 .nav-links { display: flex; gap: 4px; margin-right: auto; }
-.nav-links a { color: var(--muted); font-size: 14.5px; font-weight: 500; padding: 8px 12px; border-radius: 9px; transition: color .15s, background .15s; }
+.nav-links a { white-space: nowrap; color: var(--muted); font-size: 14.5px; font-weight: 500; padding: 8px 12px; border-radius: 9px; transition: color .15s, background .15s; }
 .nav-links a:hover, .nav-links a[aria-current] { color: var(--text); background: var(--surface-2); text-decoration: none; }
 .nav-tools { display: flex; align-items: center; gap: 6px; }
 .icon-btn {
@@ -194,7 +194,7 @@ kbd {
 .theme-btn .sun, :root[data-theme='light'] .theme-btn .moon { display: none; }
 :root[data-theme='light'] .theme-btn .sun { display: block; }
 .burger { display: none; }
-@media (max-width: 940px) {
+@media (max-width: 1040px) {
   .burger { display: inline-grid; }
   .nav .wrap { gap: 12px; }
   .nav-links {

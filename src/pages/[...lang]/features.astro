@@ -46,7 +46,7 @@ const f = s.features;
       <div class="apps">
         {s.apps.map((a, i) => (
           <div class="card app reveal" style={`--d:${(i % 4) * 0.06}s`}>
-            <div class="app-ico" style={`--c1:${a.c[0]};--c2:${a.c[1]}`}><Icon name={a.id} /></div>
+            <img class="app-ico" src={`/icons/${a.id}.webp`} width="56" height="56" loading="lazy" decoding="async" alt="" />
             <h3>{a.name}</h3><code>{a.bin}</code><p>{a.text}</p>
           </div>
         ))}

@@ -154,7 +154,7 @@ const en: typeof ru = {
     { id: 'textedit', bin: 'feather-textedit', name: 'Text Editor', text: 'Tabs, line numbers, find and replace, and syntax highlighting.', c: ['#a98bff', '#6a3df0'] },
     { id: 'calc', bin: 'feather-calc', name: 'Calculator', text: 'Basic, scientific and programmer modes with a history log.', c: ['#ffa24a', '#f0621a'] },
     { id: 'monitor', bin: 'feather-monitor', name: 'System Monitor', text: 'Processes and live graphs on the familiar Ctrl + Alt + Del.', c: ['#4ee08f', '#0f9a55'] },
-    { id: 'store', bin: 'feather-store', name: 'Store', text: 'A catalogue of Linux apps with one-click install.', c: ['#ff7eb6', '#e0408c'] },
+    { id: 'store', bin: 'feather-store', name: 'Store', text: 'System packages and the Flathub catalogue with one-click install.', c: ['#4696ff', '#7646e8'] },
   ],
 
   features: {
@@ -286,12 +286,12 @@ const en: typeof ru = {
         points: [
           '<b>Appearance.</b> Light and dark themes, accent colour, font size.',
           '<b>Displays.</b> Scaling from 100 to 250%, up to 240 Hz, multiple monitors, night mode.',
-          '<b>Keyboard.</b> Layouts and a full table for remapping shortcuts.',
+          '<b>Keyboard.</b> Layouts, an interactive shortcuts cheat sheet and a full table for remapping keys.',
           '<b>Accessibility.</b> Large text, contrast, reduced transparency, sticky keys.',
           '<b>Hot corners.</b> Mission Control, Launchpad or lock when the pointer hits a corner.',
         ],
-        keys: [['Super + =', 'scale up'], ['Super + -', 'scale down']],
-        shots: [['14-settings-keyboard', 'System Settings — Keyboard']],
+        keys: [['Super + Shift + /', 'shortcuts cheat sheet'], ['Super + =', 'scale up'], ['Super + -', 'scale down']],
+        shots: [['14-settings-keyboard', 'System Settings — Keyboard'], ['15-shortcuts-guide', 'Feather Keyboard Shortcuts cheat sheet']],
       },
       {
         id: 'compat', nav: 'Gaming', tag: '11 — Compatibility',

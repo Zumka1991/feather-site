@@ -48,7 +48,7 @@ async function guide(lang) {
   await writeFile(out('src', 'content', `guide.${lang}.md`), md.trim() + '\n');
 }
 
-// --- Скриншоты и обои ------------------------------------------------------
+// --- Скриншоты, значки и обои ----------------------------------------------
 async function shots() {
   for (const lang of ['ru', 'en']) {
     const dir = path.join(src, 'docs', 'images', 'guide', lang);
@@ -60,6 +60,19 @@ async function shots() {
       await img.clone().resize({ width: 800 }).webp({ quality: 82 })
         .toFile(out('public', 'shots', lang, `${base}-800.webp`));
     }
+  }
+}
+
+async function icons() {
+  const dir = path.join(src, 'docs', 'images', 'icons');
+  if (!existsSync(dir)) return;
+  await ensure(out('public', 'icons'));
+  for (const f of (await readdir(dir)).filter((n) => n.endsWith('.png'))) {
+    const base = f.replace(/\.png$/, '');
+    await sharp(path.join(dir, f))
+      .resize({ width: 128, height: 128 })
+      .webp({ lossless: true })
+      .toFile(out('public', 'icons', `${base}.webp`));
   }
 }
 
@@ -101,6 +114,7 @@ const version = cargo.match(/^version\s*=\s*"([^"]+)"/m)[1];
 await guide('ru');
 await guide('en');
 await shots();
+await icons();
 const wallpapers = await walls();
 const releases = await changelog();
 await ensure(out('src', 'data'));

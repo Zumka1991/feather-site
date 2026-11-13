@@ -317,7 +317,7 @@ const en: typeof ru = {
       meta: 'ISO image · {size} · x86_64',
       points: [
         'Based on Ubuntu 26.04 LTS, updated with plain <code>apt upgrade</code>',
-        'Live session without installing, and an installer with disk encryption',
+        'Live session without installing, and a native Feather installer with disk encryption',
         'Office, browser, video, music, printing and drivers included',
         'UEFI with Secure Boot and older BIOS machines',
       ],

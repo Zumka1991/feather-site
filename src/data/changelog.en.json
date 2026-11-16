@@ -1,0 +1,297 @@
+[
+ {
+  "date": "2026-11-16",
+  "version": "0.25.0",
+  "html": "<ul>\n<li><strong>English is now the default interface language</strong> and comes first in the language lists\n(first-run wizard and System Settings). A language you have already chosen is not changed.</li>\n<li><strong>More complete translations</strong> in Files, System Settings and the shell: &quot;Cut&quot;, &quot;Open With…&quot;,\nview and sort menus, dialogs, status messages (&quot;Cut: 3 items&quot;, &quot;Copying “a” to “b”&quot;), sizes\nwith the right decimal separator, wallpapers, keyboard and notification settings, network\nerrors, the calendar. Checked menu items are translated too.</li>\n<li>Still Russian only: the <code>featherctl</code> command-line tool, the demo text of the text editor and\nlog messages.</li>\n</ul>\n"
+ },
+ {
+  "date": "2026-11-15",
+  "version": "0.24.2",
+  "html": "<ul>\n<li>White icons in the menu bar on the dark theme: the menu bar is always dark with white text and\nicons whatever the wallpaper, instead of turning black under a light sky.</li>\n</ul>\n"
+ },
+ {
+  "date": "2026-11-15",
+  "version": "0.24.1",
+  "html": "<ul>\n<li>A more expressive Dock on the dark theme: the plates under Chrome, Firefox, Telegram and similar\nicons are darker than the Dock glass with a bright edge highlight, the icons are larger on\nthem, square icons are rounded like the rest, and a soft shadow sits under the icons.</li>\n</ul>\n"
+ },
+ {
+  "date": "2026-11-15",
+  "version": "0.24.0",
+  "html": "<ul>\n<li>Complete silence in Do Not Disturb: a new &quot;Urgent notifications&quot; switch in System Settings →\nNotifications. Turn it off and no banner appears in Do Not Disturb, even an urgent one;\neverything quietly collects in the Notification Center. On by default (behaviour unchanged).</li>\n</ul>\n"
+ },
+ {
+  "date": "2026-11-15",
+  "version": "0.23.1",
+  "html": "<ul>\n<li><strong>Arch Linux: one command installs everything.</strong> The <code>install.sh</code> one-liner now works on Arch\nand derivatives: it installs Feather, the app set (Firefox, LibreOffice, video, music,\nprinting, codecs, Flatpak for the Store), interface locales, and on a system without a login\nscreen — the Feather login screen. Feather only: <code>… | bash -s -- --minimal</code>.</li>\n<li>Konsole and Dolphin on a KDE system no longer merge with Feather&#39;s Terminal and Files.</li>\n</ul>\n"
+ },
+ {
+  "date": "2026-11-15",
+  "version": "0.23.0",
+  "html": "<ul>\n<li>Monitors on a second graphics card (a hybrid laptop with HDMI on the discrete card, a docking\nstation) are detected and work as ordinary screens. Not yet tested on real two-GPU hardware;\n<code>FEATHER_SINGLE_GPU=1</code> restores the old behaviour.</li>\n<li>The &quot;Russian — typewriter&quot; keyboard layout (System Settings → Keyboard → Add).</li>\n</ul>\n"
+ },
+ {
+  "date": "2026-11-14",
+  "version": "0.22.0",
+  "html": "<ul>\n<li>Tray icons share one style: app icons in the menu bar are made monochrome to match the panel\ntext, as in macOS; coloured marks (a red unread dot) are kept. Original colours can be\nrestored in System Settings.</li>\n<li>The menu bar no longer turns light over a maximised light window.</li>\n<li>Steam game icons in the Dock instead of a generic icon.</li>\n</ul>\n"
+ },
+ {
+  "date": "2026-11-14",
+  "version": "0.21.0",
+  "html": "<ul>\n<li><strong>Animation speed:</strong> a new slider in System Settings → Appearance, from 0.5× to 2×, speeds up\nor slows down all Feather animations together.</li>\n<li>The lock screen on Astra Linux accepts the correct password again (the <code>feather-lock</code> PAM\nstack no longer includes a non-existent <code>system-auth</code>).</li>\n</ul>\n"
+ },
+ {
+  "date": "2026-11-14",
+  "version": "0.20.8",
+  "html": "<ul>\n<li>Mouse wheel and touchpad scrolling in the modal pick lists of System Settings (time zone,\nautostart apps, default apps).</li>\n<li>Files: pick any application, or type your own command, in &quot;Open With…&quot;.</li>\n<li>A smarter contrast algorithm for the menu bar and its menus over any wallpaper.</li>\n</ul>\n"
+ },
+ {
+  "date": "2026-11-14",
+  "version": "0.20.7",
+  "html": "<ul>\n<li>The Drop Shelf remembers its position.</li>\n<li>Moving a window to the Scratchpad with <code>Super + Shift + S</code> slides the Scratchpad out at once.</li>\n<li>Open Terminal windows follow a theme change live.</li>\n<li>A neutral bash prompt on a fresh Ubuntu.</li>\n<li>Files: undo with <code>Ctrl + Z</code>.</li>\n<li>Fullscreen for any app with <code>Cmd + F</code> (<code>Super + F</code>).</li>\n<li>The menu bar menu takes on the tint of the wallpaper-based bar colour.</li>\n<li>Fixes for Steam <code>DISPLAY</code>, <code>linux-drm-syncobj</code> and black Zen/Firefox windows (a community\npull request).</li>\n</ul>\n"
+ },
+ {
+  "date": "2026-11-13",
+  "version": "0.20.6",
+  "html": "<ul>\n<li>A tidier Control Center: cards with a highlighted edge, round toggle pills, sliders with a\nknob, cover art on the &quot;Now Playing&quot; card; &quot;Do Not Disturb&quot; and &quot;Dark Mode&quot; labels are no\nlonger cut off. Wi‑Fi, Bluetooth and Sound pages get a back button, arc signal strength,\ndevice-type icons with a battery and a checkmark on the active item.</li>\n<li>Menu bar: new speaker and Do Not Disturb icons; icons no longer shift when the minute changes.</li>\n</ul>\n"
+ },
+ {
+  "date": "2026-11-13",
+  "version": "0.20.5",
+  "html": "<ul>\n<li>Security: caller authorisation on the private and control D-Bus interfaces. Only the real\nportal backend can use <code>org.feather.ScreenCast1</code>, only <code>xdg-desktop-portal</code> can call the\nportal backend, and <code>org.feather.Shell1</code> rejects calls from sandboxes (Flatpak, Snap,\n<code>xdg-dbus-proxy</code>) and respects the screen-capture ban.</li>\n</ul>\n"
+ },
+ {
+  "date": "2026-11-13",
+  "version": "0.20.4",
+  "html": "<ul>\n<li>Flatpak and Snap app icons in the Feather shell (including apps installed from Flathub, such\nas Zen Browser).</li>\n</ul>\n"
+ },
+ {
+  "date": "2026-11-12",
+  "version": "0.20.3",
+  "html": "<ul>\n<li><strong>Flathub in the built-in Store:</strong> one-click connection, a &quot;System package / Flathub&quot; choice\nfor programs available from both, installing, launching, removing and updates.</li>\n<li>A built-in interactive &quot;Feather Keyboard Shortcuts&quot; cheat-sheet window.</li>\n</ul>\n"
+ },
+ {
+  "date": "2026-11-12",
+  "version": "0.20.2",
+  "html": "<ul>\n<li>A central glass HUD plate when switching workspaces: the number, page dots and the current\nlayout mode.</li>\n</ul>\n"
+ },
+ {
+  "date": "2026-11-12",
+  "version": "0.20.1",
+  "html": "<ul>\n<li>Direct workspace switching with <code>Cmd + 1…9</code>; a missing space is created on the fly and empty\ntrailing spaces collapse when you leave.</li>\n<li>Moving the active window to a space with <code>Cmd + Shift + 1…9</code>, following it.</li>\n<li>Screen Recording moved to <code>⌥⌘5</code>.</li>\n</ul>\n"
+ },
+ {
+  "date": "2026-11-12",
+  "version": "0.20.0",
+  "html": "<ul>\n<li><strong>Workspace modes (<code>Ctrl + Alt + M</code>):</strong> each space works independently as free windows,\nautomatic tiling with draggable dividers, or an infinite scrollable ribbon in the style of\nPaperWM / Niri.</li>\n<li><strong>Live Liquid Glass on the GPU:</strong> panels, Dock, menus, Spotlight, Control Center and\nNotification Center refract and blur the live picture under them.</li>\n<li><strong>Drop Shelf:</strong> a shelf for dragged files, images and text, summoned by shaking the cursor.</li>\n<li><strong>Menu command search (<code>Super + /</code>):</strong> an instant palette of the active window&#39;s menu commands.</li>\n<li><strong>Picture in Picture and Ghost PiP</strong> (<code>Super + P</code> / <code>Super + Alt + P</code>).</li>\n<li><strong>A per-app audio mixer:</strong> volume, mute and output device for each program.</li>\n</ul>\n"
+ },
+ {
+  "date": "2026-11-11",
+  "version": "0.19.10",
+  "html": "<ul>\n<li>Full control of Scratchpad tiles: navigation, swapping, live divider resizing from the\nkeyboard and mouse, 50/50 equalising and fullscreen for a tile.</li>\n<li>A fix for the resize cursor disappearing at window borders, including in DRM.</li>\n</ul>\n"
+ },
+ {
+  "date": "2026-11-11",
+  "version": "0.19.9",
+  "html": "<ul>\n<li>Session logs no longer grow without limit; the global menu of Qt apps no longer accumulates\nclosed windows; scrolling dense lists on 4K in built-in apps can no longer hang.</li>\n</ul>\n"
+ },
+ {
+  "date": "2026-11-11",
+  "version": "0.19.8",
+  "html": "<ul>\n<li>A noticeably faster, smoother desktop: no idle render passes on captured-mouse motion in\ngames, key presses and trackpad scrolling.</li>\n<li>Less memory and bandwidth on HiDPI/4K: notifications and Mission Control labels use compact\nbuffers.</li>\n</ul>\n"
+ },
+ {
+  "date": "2026-11-11",
+  "version": "0.19.7",
+  "html": "<ul>\n<li><strong>Arch Linux:</strong> our own pacman repository <code>[feather-de]</code> with updates via <code>sudo pacman -Syu</code>\nand one-command installation.</li>\n</ul>\n"
+ },
+ {
+  "date": "2026-11-10",
+  "version": "0.19.6",
+  "html": "<ul>\n<li>Downloading files from Codex Desktop and other Electron programs: the save dialog opens even\nif the program passed only a file name.</li>\n</ul>\n"
+ },
+ {
+  "date": "2026-11-10",
+  "version": "0.19.5",
+  "html": "<ul>\n<li>Windows are easier to resize: wider grab zones on edges and corners, the same behaviour for\nall windows including those with their own frames, min/max sizes respected.</li>\n</ul>\n"
+ },
+ {
+  "date": "2026-11-10",
+  "version": "0.19.4",
+  "html": "<ul>\n<li>Fixed a whole-desktop crash when hovering a Dock icon whose name is wider than the panel.</li>\n<li>Files, Preview, Text Editor, Monitor, Store, Notes and Calculator report only the changed\npart of the window: fewer stalls, especially in maximised 4K windows.</li>\n</ul>\n"
+ },
+ {
+  "date": "2026-11-10",
+  "version": "0.19.3",
+  "html": "<ul>\n<li>Screen Recording: fixed a green screen with artefacts in HEVC video (4K on AMD cards).</li>\n<li>Notifications can be closed with the cross over the Scratchpad too.</li>\n</ul>\n"
+ },
+ {
+  "date": "2026-11-09",
+  "version": "0.19.2",
+  "html": "<ul>\n<li>Screen Recording without freezes: the graphics card encodes the video (VAAPI H.264, HEVC for\n4K), correct colours (BT.709), microphone in sync, a keyframe every 2 s.</li>\n</ul>\n"
+ },
+ {
+  "date": "2026-11-09",
+  "version": "0.19.1",
+  "html": "<ul>\n<li>The app ring no longer reorders programs: each has a fixed place like in the Dock. Switching\nonly by an explicit action: a click or Enter.</li>\n</ul>\n"
+ },
+ {
+  "date": "2026-11-09",
+  "version": "0.19.0",
+  "html": "<ul>\n<li><strong>The app ring:</strong> a short press of Cmd (Super) lays out the open programs in a circle around\nthe cursor. &quot;Cmd, Cmd&quot; goes back to the previous program; choose with the mouse, arrows, Tab,\nthe wheel or the first letter. Can be turned off in System Settings → Keyboard.</li>\n</ul>\n"
+ },
+ {
+  "date": "2026-11-09",
+  "version": "0.18.0",
+  "html": "<ul>\n<li>GTK 3/4 apps without their own header (dialogs, simple windows) get the same Feather title\nbar with traffic lights as Qt and built-in windows, including the tiling menu on the green\nbutton. GTK snap apps get the macOS-style buttons too.</li>\n</ul>\n"
+ },
+ {
+  "date": "2026-11-09",
+  "version": "0.17.1",
+  "html": "<ul>\n<li>Caps Lock can be chosen as the language switch; it works like in macOS: a tap switches the\nlanguage, holding turns capitals on.</li>\n</ul>\n"
+ },
+ {
+  "date": "2026-11-08",
+  "version": "0.17.0",
+  "html": "<ul>\n<li>Files: window buttons in the title bar and the folder sidebar as a separate card below.</li>\n<li>Wallpapers 2.0: a preview monitor with the real picture, fill/fit/stretch scaling,\nauto-change, all gradients as separate tiles.</li>\n<li>Five new wallpapers: Waves, Dunes, Ridges, Emerald, Graphite.</li>\n</ul>\n"
+ },
+ {
+  "date": "2026-11-08",
+  "version": "0.16.0",
+  "html": "<ul>\n<li>Ilya Birman&#39;s typographic keyboard layout on the right Alt.</li>\n<li>Flatpak and Snap browsers (such as Zen) can be the default browser.</li>\n<li>A clear notification if xwayland-satellite is missing.</li>\n</ul>\n"
+ },
+ {
+  "date": "2026-11-08",
+  "version": "0.15.1",
+  "html": "<ul>\n<li>A Terminal with a single tab has no tab bar; a second tab opens with a tidy &quot;+&quot; in the title bar.</li>\n</ul>\n"
+ },
+ {
+  "date": "2026-11-07",
+  "version": "0.15.0",
+  "html": "<ul>\n<li>macOS Tahoe-style Terminal tabs; a blue dot marks a background tab with new output.</li>\n<li>The Caffeine icon is a cup on a saucer, no longer confused with the battery.</li>\n</ul>\n"
+ },
+ {
+  "date": "2026-11-06",
+  "version": "0.14.0",
+  "html": "<ul>\n<li>Files open and extract RAR archives themselves (RAR4, RAR5, multi-part, password-protected).</li>\n<li>Files: extracting all archives and &quot;Compress&quot; work again in a real window.</li>\n<li>Chrome and other Chromium windows no longer leave a gap above the Dock when they open maximised.</li>\n</ul>\n"
+ },
+ {
+  "date": "2026-11-07",
+  "version": "0.13.1",
+  "html": "<ul>\n<li>The Scratchpad (<code>Super + S</code>) opens faster and no longer stutters if Alt+Tab follows at once.</li>\n</ul>\n"
+ },
+ {
+  "date": "2026-11-06",
+  "version": "0.13.0",
+  "html": "<ul>\n<li><strong>The Scratchpad:</strong> a layer of windows above all spaces. <code>Super + S</code> shows it,\n<code>Super + Shift + S</code> moves the focused window there and back.</li>\n</ul>\n"
+ },
+ {
+  "date": "2026-11-06",
+  "version": "0.12.0",
+  "html": "<ul>\n<li>Window tiling to halves and quarters (edges, the green-button menu, the Window menu,\n<code>Ctrl + Super + arrows</code>).</li>\n<li>Windows reopen where they were and at their old size; the previous session returns at login.</li>\n<li>Spotlight searches open windows, settings sections, notes and home-folder files.</li>\n</ul>\n"
+ },
+ {
+  "date": "2026-11-03",
+  "version": "0.11.1",
+  "html": "<ul>\n<li>Larvis can change the Dock position through the desktop API.</li>\n</ul>\n"
+ },
+ {
+  "date": "2026-11-03",
+  "version": "0.11.0",
+  "html": "<ul>\n<li><code>FEATHER_AUTOMATION=1</code> enables window screenshot, click, scroll, keyboard and text-paste\nmethods of the desktop API for application automation.</li>\n</ul>\n"
+ },
+ {
+  "date": "2026-11-03",
+  "version": "0.10.0",
+  "html": "<ul>\n<li><strong>The <code>org.feather.Shell1</code> desktop API</strong> on the D-Bus session bus (windows, spaces, Mission\nControl and Launchpad, apps, sound, brightness, night mode, dark theme, Do Not Disturb, media,\nscreenshots, lock and sleep) and the <code>featherctl</code> tool. The voice assistant Larvis drives the\ndesktop through it.</li>\n</ul>\n"
+ },
+ {
+  "date": "2026-11-02",
+  "version": "0.9.1",
+  "html": "<ul>\n<li>Clipboard: <code>ext-data-control</code> and <code>wlr-data-control</code> support (wl-copy/wl-paste, clipboard\nmanagers, images pasted into other Wayland programs).</li>\n<li>Files: text selection by dragging in rename, search and path fields.</li>\n</ul>\n"
+ },
+ {
+  "date": "2026-11-01",
+  "version": "0.9.0",
+  "html": "<ul>\n<li>A task manager, <strong>System Monitor</strong>, on <code>Ctrl + Alt + Del</code>: processes with CPU and memory,\nsorting, search, &quot;Quit Process&quot; and CPU/memory/disk/network graphs.</li>\n<li>Lock, screen blanking and sleep can be postponed for 2 or 5 hours.</li>\n</ul>\n"
+ },
+ {
+  "date": "2026-10-31",
+  "version": "0.8.1",
+  "html": "<ul>\n<li>Files show extraction progress with an &quot;X of Y — about N min left&quot; card and a cancel button.</li>\n</ul>\n"
+ },
+ {
+  "date": "2026-10-31",
+  "version": "0.8.0",
+  "html": "<ul>\n<li>Files extract all common archives (single gz, xz, bz2, zst, cab, arj, lzh, cpio, ace);\nWindows zips with Russian names extract correctly; an archive opened from another program is\nextracted next to it at once.</li>\n</ul>\n"
+ },
+ {
+  "date": "2026-10-31",
+  "version": "0.7.1",
+  "html": "<ul>\n<li>On the dark Dock, round and non-square icons (for example Chrome) no longer blend into the background.</li>\n</ul>\n"
+ },
+ {
+  "date": "2026-10-31",
+  "version": "0.7.0",
+  "html": "<ul>\n<li>Files see all disks and flash drives, not only mounted ones: a click mounts, ⏏ safely ejects.</li>\n<li>A &quot;Now Playing&quot; tile in Control Center: track, artist, ⏮ ⏯ ⏭.</li>\n</ul>\n"
+ },
+ {
+  "date": "2026-10-31",
+  "version": "0.6.3",
+  "html": "<ul>\n<li>Files extract RAR archives, including RAR5 and multi-part ones; encrypted RAR, zip and 7z ask\nfor a password; zip with a password no longer hangs.</li>\n</ul>\n"
+ },
+ {
+  "date": "2026-10-31",
+  "version": "0.6.2",
+  "html": "<ul>\n<li>Autostart programs start after you enter your password, not on the login screen.</li>\n<li>If a program does not open, the reason stays in <code>~/.local/state/feather-de/apps.log</code>.</li>\n</ul>\n"
+ },
+ {
+  "date": "2026-10-30",
+  "version": "0.6.1",
+  "html": "<ul>\n<li>After logging out and in again, Telegram, MouseVPN and other single-instance programs start\nagain: on logout Feather closes the programs it started.</li>\n</ul>\n"
+ },
+ {
+  "date": "2026-10-30",
+  "version": "0.6.0",
+  "html": "<ul>\n<li><strong>The Store:</strong> a new app in the Dock and Launchpad with a featured selection, categories,\nsearch and program pages. Install and remove in one click.</li>\n</ul>\n"
+ },
+ {
+  "date": "2026-10-30",
+  "version": "0.5.0",
+  "html": "<ul>\n<li>Minimised windows, windows on other spaces and windows under a fullscreen game are no longer\ndrawn needlessly at the display rate: a browser with a video in the Dock no longer loads the\nCPU and GPU.</li>\n<li>Dock icon magnification on hover is done by the GPU.</li>\n</ul>\n"
+ },
+ {
+  "date": "2026-10-30",
+  "version": "0.4.2",
+  "html": "<ul>\n<li>Launching Codex, Antigravity, Chromium and other Electron apps no longer blocks the screen.</li>\n</ul>\n"
+ },
+ {
+  "date": "2026-10-30",
+  "version": "0.4.1",
+  "html": "<ul>\n<li>The icon of a just-installed program appears in the Dock and Launchpad at once.</li>\n<li>Files: the context menu widens for long items, and a too-long name is ellipsised.</li>\n</ul>\n"
+ },
+ {
+  "date": "2026-10-30",
+  "version": "0.4.0",
+  "html": "<ul>\n<li>Files: &quot;Open With…&quot; in a file&#39;s context menu, listing the programs that can open that type.</li>\n</ul>\n"
+ },
+ {
+  "date": "2026-10-30",
+  "version": "0.3.2",
+  "html": "<ul>\n<li>Files: rename by a slow click on a selected name (like Finder) and Ctrl+C/X/V in the name,\npath and search fields, including in the Russian layout.</li>\n</ul>\n"
+ },
+ {
+  "date": "2026-10-30",
+  "version": "0.3.1",
+  "html": "<ul>\n<li>One-command installation; the <code>.deb</code> adds the repository itself; the <code>feather-desktop</code>\nmetapackage with programs like Ubuntu Desktop; xwayland-satellite inside the package; running\nAppImage from Files.</li>\n</ul>\n"
+ },
+ {
+  "date": "2026-10-30",
+  "version": "0.3.0",
+  "html": "<ul>\n<li>In the APT repository: native Wayland Electron/Chromium, bicubic scaling of legacy programs,\n<code>.deb</code> from the browser, a compatibility check in the installer, an archiver in Files,\nCtrl+letter in the Russian layout.</li>\n</ul>\n"
+ },
+ {
+  "date": "2026-10-29",
+  "version": "0.2.0",
+  "html": "<ul>\n<li>The first version in the APT repository <code>https://zumka1991.github.io/feather-de</code>.\nRepository signing key: <code>D5E6 C262 8719 EF1D 6068 5758 C7F9 44C1 485C 5FC4</code>.</li>\n</ul>\n"
+ }
+]

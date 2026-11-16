@@ -21,6 +21,16 @@ const links = [
   ['changelog', '/changelog/'],
   ['community', '/community/'],
 ] as const;
+// Visitors whose browser is not Russian land on the English site unless they chose a language
+const langRedirect = `(function () {
+  try {
+    var saved = localStorage.getItem('lang');
+    if (saved === 'ru') return;
+    if (/bot|crawl|spider|lighthouse|preview/i.test(navigator.userAgent)) return;
+    var other = !/^(ru|uk|be|kk)(-|$)/i.test(navigator.language || 'ru');
+    if (saved === 'en' || other) location.replace('/en' + location.pathname + location.search + location.hash);
+  } catch (e) {}
+})();`;
 ---
 <!doctype html>
 <html lang={lang} data-theme="dark">
@@ -33,6 +43,7 @@ const links = [
   <link rel="alternate" hreflang="ru" href={site + path} />
   <link rel="alternate" hreflang="en" href={site + '/en' + path} />
   <link rel="alternate" hreflang="x-default" href={site + path} />
+  {lang === 'ru' && <script is:inline set:html={langRedirect}></script>}
   <meta property="og:site_name" content="Feather OS" />
   <meta property="og:locale" content={s.locale} />
   <meta property="og:type" content="website" />
@@ -127,6 +138,10 @@ const links = [
       const next = root.dataset.theme === 'light' ? 'dark' : 'light';
       root.dataset.theme = next;
       try { localStorage.setItem('theme', next); } catch {}
+    });
+    // Выбор языка запоминается: автопереход по языку браузера его не перебивает
+    document.querySelectorAll<HTMLAnchorElement>('.nav-tools a[hreflang]').forEach((a) => {
+      a.addEventListener('click', () => { try { localStorage.setItem('lang', a.hreflang); } catch {} });
     });
     // Мобильное меню
     const nav = document.querySelector('.nav');

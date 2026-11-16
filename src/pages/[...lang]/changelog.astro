@@ -1,12 +1,14 @@
 ---
 import Base from '../../layouts/Base.astro';
 import { t, langOf, langPaths, GH } from '../../i18n';
-import releases from '../../data/changelog.json';
+import releasesRu from '../../data/changelog.json';
+import releasesEn from '../../data/changelog.en.json';
 
 export const getStaticPaths = langPaths;
 const lang = langOf(Astro.params.lang);
 const s = t(lang);
 const c = s.changelog;
+const releases = lang === 'en' ? releasesEn : releasesRu;
 const fmt = new Intl.DateTimeFormat(lang === 'en' ? 'en-GB' : 'ru-RU', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' });
 ---
 <Base lang={lang} page="changelog" path="/changelog/">
@@ -15,7 +17,7 @@ const fmt = new Intl.DateTimeFormat(lang === 'en' ? 'en-GB' : 'ru-RU', { day: 'n
       <span class="eyebrow">{c.eyebrow}</span>
       <h1 class="h-lg">{c.title}</h1>
       <p class="lead">{c.lead}</p>
-      <p style="margin-top:24px"><a class="btn btn-ghost" href={`${GH}/blob/master/CHANGELOG.md`}>{c.full} →</a></p>
+      <p style="margin-top:24px"><a class="btn btn-ghost" href={`${GH}/blob/master/${lang === 'en' ? 'CHANGELOG.en.md' : 'CHANGELOG.md'}`}>{c.full} →</a></p>
     </div>
   </section>
   <div class="wrap timeline" style="padding-bottom:80px">
@@ -26,7 +28,7 @@ const fmt = new Intl.DateTimeFormat(lang === 'en' ? 'en-GB' : 'ru-RU', { day: 'n
           <time datetime={r.date}>{fmt.format(new Date(r.date))}</time>
           {i === 0 && <span class="chip" style="justify-self:start"><span class="dot"></span>{c.latest}</span>}
         </div>
-        <div class="prose" lang="ru" set:html={r.html} />
+        <div class="prose" lang={lang} set:html={r.html} />
       </article>
     ))}
   </div>

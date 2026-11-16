@@ -92,18 +92,21 @@ async function walls() {
 }
 
 // --- Журнал выпусков -------------------------------------------------------
-async function changelog() {
-  const md = await readFile(path.join(src, 'CHANGELOG.md'), 'utf8');
+async function changelog(lang) {
+  const md = await readFile(path.join(src, lang === 'en' ? 'CHANGELOG.en.md' : 'CHANGELOG.md'), 'utf8');
   const parts = md.split(/^## /m).slice(1);
   const releases = [];
   for (const part of parts) {
     const nl = part.indexOf('\n');
     const head = part.slice(0, nl).trim();
-    const m = head.match(/^(\d{4}-\d{2}-\d{2})\s+—\s+Выпуск\s+(\d+\.\d+\.\d+)/);
+    const m = lang === 'en'
+      ? head.match(/^(\d+\.\d+\.\d+)\s+—\s+(\d{4}-\d{2}-\d{2})/)
+      : head.match(/^(\d{4}-\d{2}-\d{2})\s+—\s+Выпуск\s+(\d+\.\d+\.\d+)/);
     if (!m) continue;
+    const [date, version] = lang === 'en' ? [m[2], m[1]] : [m[1], m[2]];
     const body = part.slice(nl + 1).trim()
       .replace(/\]\((?!https?:|#)([^)]+)\)/g, `](${GH}$1)`);
-    releases.push({ date: m[1], version: m[2], html: marked.parse(body) });
+    releases.push({ date, version, html: marked.parse(body) });
   }
   return releases;
 }
@@ -116,9 +119,11 @@ await guide('en');
 await shots();
 await icons();
 const wallpapers = await walls();
-const releases = await changelog();
+const releases = await changelog('ru');
+const releasesEn = await changelog('en');
 await ensure(out('src', 'data'));
 await writeFile(out('src', 'data', 'changelog.json'), JSON.stringify(releases, null, 1) + '\n');
+await writeFile(out('src', 'data', 'changelog.en.json'), JSON.stringify(releasesEn, null, 1) + '\n');
 await writeFile(
   out('src', 'data', 'project.json'),
   JSON.stringify({ version, released: releases[0]?.date ?? null, wallpapers }, null, 2) + '\n',

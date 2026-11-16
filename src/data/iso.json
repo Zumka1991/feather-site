@@ -1,6 +1,6 @@
 {
-  "version": "0.20.4",
-  "size": { "ru": "2,1 ГБ", "en": "2.1 GB" },
-  "url": "https://sourceforge.net/projects/featheros/files/0.20.4/feather-os-0.20.4-amd64.iso/download",
-  "sha256": "7a4cb3b1c15af1c6952f1fbac2bd88891338b31d07daf832b7b8ed4399528935"
+  "version": "0.25.0",
+  "size": { "ru": "2,2 ГБ", "en": "2.2 GB" },
+  "url": "https://sourceforge.net/projects/featheros/files/0.25.0/feather-os-0.25.0-amd64.iso/download",
+  "sha256": "a5217018ca7537c686c12f785e8468dd1806b585c8a89c50744a675278d43206"
 }
